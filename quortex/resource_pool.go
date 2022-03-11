@@ -14,15 +14,15 @@ func resourcePool() *schema.Resource {
 		UpdateContext: resourcePoolUpdate,
 		DeleteContext: resourcePoolDelete,
 		Schema: map[string]*schema.Schema{
-			"name": &schema.Schema{
+			"name": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"published": &schema.Schema{
+			"published": {
 				Type:     schema.TypeBool,
 				Optional: true,
 			},
-			"input_region": &schema.Schema{
+			"input_region": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},

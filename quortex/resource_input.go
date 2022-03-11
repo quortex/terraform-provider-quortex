@@ -15,53 +15,53 @@ func resourceInput() *schema.Resource {
 		UpdateContext: resourceInputUpdate,
 		DeleteContext: resourceInputDelete,
 		Schema: map[string]*schema.Schema{
-			"pool_id": &schema.Schema{
+			"pool_id": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"name": &schema.Schema{
+			"name": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"identifier": &schema.Schema{
+			"identifier": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"published": &schema.Schema{
+			"published": {
 				Type:     schema.TypeBool,
 				Optional: true,
 			},
-			"stream": &schema.Schema{
+			"stream": {
 				Type:     schema.TypeList,
 				Optional: true,
 				MinItems: 0,
 				MaxItems: 2,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
-						"uuid": &schema.Schema{
+						"uuid": {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"name": &schema.Schema{
+						"name": {
 							Type:     schema.TypeString,
 							Required: true,
 						},
-						"enabled": &schema.Schema{
+						"enabled": {
 							Type:     schema.TypeBool,
 							Optional: true,
 						},
-						"srt": &schema.Schema{
+						"srt": {
 							Type:     schema.TypeList,
 							Optional: true,
 							MinItems: 0,
 							MaxItems: 1,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
-									"latency": &schema.Schema{
+									"latency": {
 										Type:     schema.TypeInt,
 										Optional: true,
 									},
-									"connection_type": &schema.Schema{
+									"connection_type": {
 										Type:     schema.TypeString,
 										Required: true,
 									},
@@ -69,7 +69,7 @@ func resourceInput() *schema.Resource {
 							},
 						},
 
-						"rtmp": &schema.Schema{
+						"rtmp": {
 							Type:     schema.TypeList,
 							Optional: true,
 							MinItems: 0,

@@ -11,23 +11,23 @@ import (
 func Provider() *schema.Provider {
 	return &schema.Provider{
 		Schema: map[string]*schema.Schema{
-			"host": &schema.Schema{
+			"host": {
 				Type:        schema.TypeString,
 				Optional:    true,
 				DefaultFunc: schema.EnvDefaultFunc("QUORTEX_HOST", nil),
 			},
-			"username": &schema.Schema{
+			"username": {
 				Type:        schema.TypeString,
 				Optional:    true,
 				DefaultFunc: schema.EnvDefaultFunc("QUORTEX_USERNAME", nil),
 			},
-			"password": &schema.Schema{
+			"password": {
 				Type:        schema.TypeString,
 				Optional:    true,
 				Sensitive:   true,
 				DefaultFunc: schema.EnvDefaultFunc("QUORTEX_PASSWORD", nil),
 			},
-			"api_key": &schema.Schema{
+			"api_key": {
 				Type:        schema.TypeString,
 				Optional:    true,
 				Sensitive:   true,

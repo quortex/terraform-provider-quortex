@@ -14,53 +14,53 @@ func resourceProcessing() *schema.Resource {
 		UpdateContext: resourceProcessingUpdate,
 		DeleteContext: resourceProcessingDelete,
 		Schema: map[string]*schema.Schema{
-			"pool_id": &schema.Schema{
+			"pool_id": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"name": &schema.Schema{
+			"name": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"identifier": &schema.Schema{
+			"identifier": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"published": &schema.Schema{
+			"published": {
 				Type:     schema.TypeBool,
 				Optional: true,
 			},
-			"video": &schema.Schema{
+			"video": {
 				Type:     schema.TypeList,
 				Optional: true,
 				MinItems: 0,
 				MaxItems: 10,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
-						"codec": &schema.Schema{
+						"codec": {
 							Type:     schema.TypeString,
 							Required: true,
 						},
-						"bitrate": &schema.Schema{
+						"bitrate": {
 							Type:     schema.TypeInt,
 							Required: true,
 						},
-						"framerate": &schema.Schema{
+						"framerate": {
 							Type:     schema.TypeString,
 							Required: true,
 						},
-						"resolution": &schema.Schema{
+						"resolution": {
 							Type:     schema.TypeList,
 							Required: true,
 							MinItems: 1,
 							MaxItems: 1,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
-									"width": &schema.Schema{
+									"width": {
 										Type:     schema.TypeInt,
 										Required: true,
 									},
-									"height": &schema.Schema{
+									"height": {
 										Type:     schema.TypeInt,
 										Required: true,
 									},
@@ -70,56 +70,56 @@ func resourceProcessing() *schema.Resource {
 					},
 				},
 			},
-			"audio": &schema.Schema{
+			"audio": {
 				Type:     schema.TypeList,
 				Optional: true,
 				MinItems: 0,
 				MaxItems: 10,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
-						"codec": &schema.Schema{
+						"codec": {
 							Type:     schema.TypeString,
 							Required: true,
 						},
-						"channels": &schema.Schema{
+						"channels": {
 							Type:     schema.TypeString,
 							Required: true,
 						},
-						"bitrate": &schema.Schema{
+						"bitrate": {
 							Type:     schema.TypeInt,
 							Required: true,
 						},
-						"samplerate": &schema.Schema{
+						"samplerate": {
 							Type:     schema.TypeString,
 							Required: true,
 						},
-						"track": &schema.Schema{
+						"track": {
 							Type:     schema.TypeString,
 							Required: true,
 						},
-						"output": &schema.Schema{
+						"output": {
 							Type:     schema.TypeString,
 							Required: true,
 						},
-						"ad": &schema.Schema{
+						"ad": {
 							Type:     schema.TypeBool,
 							Optional: true,
 						},
 					},
 				},
 			},
-			"subtitle": &schema.Schema{
+			"subtitle": {
 				Type:     schema.TypeList,
 				Optional: true,
 				MinItems: 0,
 				MaxItems: 10,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
-						"track": &schema.Schema{
+						"track": {
 							Type:     schema.TypeString,
 							Required: true,
 						},
-						"hoh": &schema.Schema{
+						"hoh": {
 							Type:     schema.TypeBool,
 							Optional: true,
 						},
