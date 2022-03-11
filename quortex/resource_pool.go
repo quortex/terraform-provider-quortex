@@ -112,9 +112,7 @@ func resourcePoolDelete(ctx context.Context, d *schema.ResourceData, m interface
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
 
-	poolId := d.Id()
-
-	err := c.DeletePool(poolId)
+	err := c.DeletePool(d.Id())
 	if err != nil {
 		return diag.FromErr(err)
 	}
