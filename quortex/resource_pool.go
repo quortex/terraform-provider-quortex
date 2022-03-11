@@ -76,10 +76,17 @@ func resourcePoolRead(ctx context.Context, d *schema.ResourceData, m interface{}
 		return diag.FromErr(err)
 	}
 
-	d.Set("name", pool.Name)
-	d.Set("input_region", pool.InputRegion)
-	d.Set("published", pool.Published)
+	if err := d.Set("name", pool.Name); err != nil {
+		return diag.FromErr(err)
+	}
 
+	if err := d.Set("input_region", pool.InputRegion); err != nil {
+		return diag.FromErr(err)
+	}
+
+	if err := d.Set("published", pool.Published); err != nil {
+		return diag.FromErr(err)
+	}
 	return diags
 }
 

@@ -27,7 +27,7 @@ func TestProvider_impl(t *testing.T) {
 	var _ *schema.Provider = Provider()
 }
 
-func testAccPreCheck(t *testing.T) {
+func TestAccPreCheck(t *testing.T) {
 	if err := os.Getenv("QUORTEX_USERNAME"); err == "" {
 		t.Fatal("QUORTEX_USERNAME must be set for acceptance tests")
 	}

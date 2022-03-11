@@ -168,11 +168,22 @@ func resourceInputRead(ctx context.Context, d *schema.ResourceData, m interface{
 		return diag.FromErr(err)
 	}
 
-	d.Set("name", input.Name)
-	d.Set("identifier", input.Identifier)
-	d.Set("published", input.Published)
+	if err := d.Set("name", input.Name); err != nil {
+		return diag.FromErr(err)
+	}
+
+	if err := d.Set("identifier", input.Identifier); err != nil {
+		return diag.FromErr(err)
+	}
+
+	if err := d.Set("published", input.Published); err != nil {
+		return diag.FromErr(err)
+	}
+
 	streams := flattenInputStreams(&input.Streams)
-	d.Set("stream", streams)
+	if err := d.Set("stream", streams); err != nil {
+		return diag.FromErr(err)
+	}
 
 	return diags
 }
@@ -222,7 +233,7 @@ func resourceInputDelete(ctx context.Context, d *schema.ResourceData, m interfac
 
 func flattenInputStreams(streams *[]Stream) []interface{} {
 	if streams != nil {
-		ois := make([]interface{}, len(*streams), len(*streams))
+		ois := make([]interface{}, len(*streams))
 
 		for i, stream := range *streams {
 			oi := make(map[string]interface{})

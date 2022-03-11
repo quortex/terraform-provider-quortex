@@ -11,9 +11,6 @@ import (
 	"time"
 )
 
-// HostURL - Default Hashicups URL
-const HostURL string = "https://api.quortex.io"
-
 // Client -
 type Client struct {
 	HostURL    string
@@ -40,8 +37,8 @@ type QxAuthResponse struct {
 
 // AuthResponse -
 type AuthResponse struct {
-	UserID   int    `json:"user_id`
-	Username string `json:"username`
+	UserID   int    `json:"user_id"`
+	Username string `json:"username"`
 	Token    string `json:"token"`
 }
 
@@ -54,12 +51,7 @@ func basicAuth(username, password string) string {
 func NewClient(host, username *string, password *string, apikey *string) (*Client, error) {
 	c := Client{
 		HTTPClient: &http.Client{Timeout: 10 * time.Second},
-		// Default Hashicups URL
-		HostURL: HostURL,
-	}
-
-	if host != nil {
-		c.HostURL = *host
+		HostURL:    *host,
 	}
 
 	if apikey != nil {
