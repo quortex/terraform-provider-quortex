@@ -38,6 +38,7 @@ func Provider() *schema.Provider {
 			"quortex_pool":       resourcePool(),
 			"quortex_input":      resourceInput(),
 			"quortex_processing": resourceProcessing(),
+			"quortex_target":     resourceTarget(),
 		},
 		DataSourcesMap:       map[string]*schema.Resource{},
 		ConfigureContextFunc: providerConfigure,

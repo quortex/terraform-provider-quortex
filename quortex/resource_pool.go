@@ -87,6 +87,11 @@ func resourcePoolRead(ctx context.Context, d *schema.ResourceData, m interface{}
 	if err := d.Set("published", pool.Published); err != nil {
 		return diag.FromErr(err)
 	}
+
+	if err := d.Set("streaming_countries", pool.StreamingCountries); err != nil {
+		return diag.FromErr(err)
+	}
+
 	return diags
 }
 

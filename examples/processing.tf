@@ -1,10 +1,9 @@
 
 
 resource "quortex_processing" "my_proc_hd" {
-  pool_id   = quortex_pool.my_pool.id
-  name      = "hd"
-  published = true
-
+  pool_id    = quortex_pool.my_pool.id
+  name       = "hd"
+  published  = true
   identifier = "hd"
 
   video {
