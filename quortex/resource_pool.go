@@ -24,7 +24,7 @@ func resourcePool() *schema.Resource {
 			},
 			"input_region": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 			"streaming_countries": {
 				Type:     schema.TypeList,
