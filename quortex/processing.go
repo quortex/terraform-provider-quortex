@@ -25,7 +25,6 @@ func (c *Client) GetProcessing(poolName string, processingName string) (*Process
 	if err != nil {
 		return nil, err
 	}
-	log.Println(processing)
 	return &processing, nil
 }
 
@@ -52,12 +51,12 @@ func (c *Client) GetProcessings(poolName string) ([]Processing, error) {
 
 // CreateProcessing - Create new processing
 func (c *Client) CreateProcessing(poolName string, processing Processing) (*Processing, error) {
-	log.Println(processing)
 	rb, err := json.Marshal(processing)
 	if err != nil {
 		return nil, err
 	}
 
+	log.Println(string(rb))
 	req, err := http.NewRequest("POST", fmt.Sprintf("%s/1.0/pools/%s/processings", c.HostURL, poolName), strings.NewReader(string(rb)))
 	if err != nil {
 		return nil, err
@@ -73,8 +72,6 @@ func (c *Client) CreateProcessing(poolName string, processing Processing) (*Proc
 
 	err = json.Unmarshal(body, &newprocessing)
 
-	log.Println(newprocessing)
-
 	if err != nil {
 		return nil, err
 	}
@@ -88,6 +85,7 @@ func (c *Client) UpdateProcessing(poolName string, processingName string, proces
 		return nil, err
 	}
 
+	log.Println(string(rb))
 	req, err := http.NewRequest("PUT", fmt.Sprintf("%s/1.0/pools/%s/processings/%s", c.HostURL, poolName, processingName), strings.NewReader(string(rb)))
 	if err != nil {
 		return nil, err

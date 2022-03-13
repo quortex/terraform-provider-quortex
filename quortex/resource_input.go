@@ -69,13 +69,13 @@ func resourceInput() *schema.Resource {
 							},
 						},
 
-						"rtmp": {
-							Type:     schema.TypeList,
-							Optional: true,
-							MinItems: 0,
-							MaxItems: 1,
-							Elem:     &schema.Resource{},
-						},
+						// "rtmp": {
+						// 	Type:     schema.TypeList,
+						// 	Optional: true,
+						// 	MinItems: 0,
+						// 	MaxItems: 1,
+						// 	Elem:     &schema.Resource{},
+						// },
 					},
 				},
 			},

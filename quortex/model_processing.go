@@ -12,7 +12,7 @@ type Advanced struct {
 	Level              string `json:"level,omitempty"`
 	Quality            string `json:"quality,omitempty"`
 	EncodingMode       string `json:"encoding_mode,omitempty"`
-	Bframe             bool   `json:"bframe,omitempty"`
+	Bframe             *bool  `json:"bframe,omitempty"`
 	BframeNumber       int    `json:"bframe_number,omitempty"`
 	Maxrate            int    `json:"maxrate,omitempty"`
 	KeyFrameIntervalMs int    `json:"key_frame_interval_ms,omitempty"`
