@@ -252,80 +252,86 @@ func marshallModelInput(d *schema.ResourceData) (*Input, error) {
 		// Manage srt
 		if srt, ok := st["srt"]; ok {
 			srts := srt.([]interface{})
-			sr := srts[0].(map[string]interface{})
-			str.Type = "srt"
+			if len(srts) > 0 {
+				str.Type = "srt"
+				sr := srts[0].(map[string]interface{})
 
-			srtt := Srt{
-				Latency: sr["latency"].(int),
-			}
+				srtt := Srt{
+					Latency: sr["latency"].(int),
+				}
 
-			// Manage srt listener/caller
-			if srta, ok := sr["listener"]; ok {
-				srtas := srta.([]interface{})
-				if len(srtas) > 0 {
-					srtt.ConnectionType = "listener"
-					listener := Listener{}
-					first := srtas[0]
-					if first != nil {
-						srt := first.(map[string]interface{})
-						cidrs := srt["cidr"].([]interface{})
-						for _, cidr := range cidrs {
-							listener.Cidr = append(listener.Cidr, cidr.(string))
+				// Manage srt listener
+				if srta, ok := sr["listener"]; ok {
+					srtas := srta.([]interface{})
+					if len(srtas) > 0 {
+						srtt.ConnectionType = "listener"
+						listener := Listener{}
+						first := srtas[0]
+						if first != nil {
+							srt := first.(map[string]interface{})
+							cidrs := srt["cidr"].([]interface{})
+							for _, cidr := range cidrs {
+								listener.Cidr = append(listener.Cidr, cidr.(string))
+							}
 						}
+						srtt.Listener = &listener
 					}
-					srtt.Listener = &listener
+
 				}
 
-			}
-			if srta, ok := sr["caller"]; ok {
-				srtas := srta.([]interface{})
-				if len(srtas) > 0 {
-					srtt.ConnectionType = "caller"
-					caller := Caller{}
-					first := srtas[0]
-					if first != nil {
-						srt := first.(map[string]interface{})
-						caller.Address = srt["address"].(string)
-						caller.Passphrase = srt["passphrase"].(string)
+				// Manage srt caller
+				if srta, ok := sr["caller"]; ok {
+					srtas := srta.([]interface{})
+					if len(srtas) > 0 {
+						srtt.ConnectionType = "caller"
+						caller := Caller{}
+						first := srtas[0]
+						if first != nil {
+							srt := first.(map[string]interface{})
+							caller.Address = srt["address"].(string)
+							caller.Passphrase = srt["passphrase"].(string)
+						}
+						srtt.Caller = &caller
 					}
-					srtt.Caller = &caller
 				}
-			}
 
-			// Manage overrides
-			overrides := sr["overrides"].([]interface{})
-			for _, override := range overrides {
-				over := override.(map[string]interface{})
-				ov := Override{
-					Pid:     over["pid"].(int),
-					Type:    over["type"].(string),
-					Enabled: over["enabled"].(bool),
+				// Manage overrides
+				overrides := sr["overrides"].([]interface{})
+				for _, override := range overrides {
+					over := override.(map[string]interface{})
+					ov := Override{
+						Pid:     over["pid"].(int),
+						Type:    over["type"].(string),
+						Enabled: over["enabled"].(bool),
+					}
+					srtt.Overrides = append(srtt.Overrides, ov)
 				}
-				srtt.Overrides = append(srtt.Overrides, ov)
+				str.Srt = &srtt
 			}
-			str.Srt = &srtt
+		}
 
-			// Manage rtmp
-		} else if rtmp, ok := st["rtmp"]; ok {
+		// Manage rtmp
+		if rtmp, ok := st["rtmp"]; ok {
 			rtmps := rtmp.([]interface{})
-			rt := rtmps[0].(map[string]interface{})
-			str.Type = "rtmp"
+			if len(rtmps) > 0 {
+				str.Type = "rtmp"
+				rt := rtmps[0].(map[string]interface{})
 
-			rtt := Rtmp{}
+				rtt := Rtmp{}
 
-			// Manage overrides
-			overrides := rt["overrides"].([]interface{})
-			for _, override := range overrides {
-				over := override.(map[string]interface{})
-				ov := Override{
-					Pid:     0,
-					Type:    over["type"].(string),
-					Enabled: over["enabled"].(bool),
+				// Manage overrides
+				overrides := rt["overrides"].([]interface{})
+				for _, override := range overrides {
+					over := override.(map[string]interface{})
+					ov := Override{
+						Pid:     0,
+						Type:    over["type"].(string),
+						Enabled: over["enabled"].(bool),
+					}
+					rtt.Overrides = append(rtt.Overrides, ov)
 				}
-				rtt.Overrides = append(rtt.Overrides, ov)
+				str.Rtmp = &rtt
 			}
-			str.Rtmp = &rtt
-
 		}
 		ve.Streams = append(ve.Streams, str)
 	}

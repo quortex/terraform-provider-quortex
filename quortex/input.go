@@ -58,6 +58,7 @@ func (c *Client) CreateInput(poolName string, input Input) (*Input, error) {
 		return nil, err
 	}
 
+	log.Println(string(rb))
 	req, err := http.NewRequest("POST", fmt.Sprintf("%s/1.0/pools/%s/inputs", c.HostURL, poolName), strings.NewReader(string(rb)))
 	if err != nil {
 		return nil, err
@@ -88,6 +89,7 @@ func (c *Client) UpdateInput(poolName string, inputName string, input Input) (*I
 		return nil, err
 	}
 
+	log.Println(string(rb))
 	req, err := http.NewRequest("PUT", fmt.Sprintf("%s/1.0/pools/%s/inputs/%s", c.HostURL, poolName, inputName), strings.NewReader(string(rb)))
 	if err != nil {
 		return nil, err
