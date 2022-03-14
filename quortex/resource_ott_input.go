@@ -2,7 +2,6 @@ package quortex
 
 import (
 	"context"
-	"log"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -26,10 +25,12 @@ func resourceOttInput() *schema.Resource {
 			"identifier": {
 				Type:     schema.TypeString,
 				Optional: true,
+				Default:  "",
 			},
 			"published": {
 				Type:     schema.TypeBool,
 				Optional: true,
+				Default:  true,
 			},
 			"stream": {
 				Type:     schema.TypeList,
@@ -49,6 +50,7 @@ func resourceOttInput() *schema.Resource {
 						"enabled": {
 							Type:     schema.TypeBool,
 							Optional: true,
+							Default:  true,
 						},
 						"srt": {
 							Type:     schema.TypeList,
@@ -60,22 +62,163 @@ func resourceOttInput() *schema.Resource {
 									"latency": {
 										Type:     schema.TypeInt,
 										Optional: true,
+										Default:  1000,
 									},
-									"connection_type": {
-										Type:     schema.TypeString,
-										Required: true,
+									"listener": {
+										Type:     schema.TypeList,
+										Optional: true,
+										MinItems: 0,
+										MaxItems: 1,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+												"cidr": {
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+											},
+										},
+									},
+									"caller": {
+										Type:     schema.TypeList,
+										Optional: true,
+										MinItems: 0,
+										MaxItems: 1,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+												"address": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+												"passphrase": {
+													Type:     schema.TypeString,
+													Optional: true,
+													Default:  "",
+												},
+											},
+										},
+									},
+									"overrides": {
+										Type:     schema.TypeList,
+										Optional: true,
+										MinItems: 0,
+										MaxItems: 10,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+												"pid": {
+													Type:     schema.TypeInt,
+													Required: true,
+												},
+												"type": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+												"enabled": {
+													Type:     schema.TypeBool,
+													Optional: true,
+													Default:  true,
+												},
+												"audio": {
+													Type:     schema.TypeList,
+													Optional: true,
+													MinItems: 0,
+													MaxItems: 1,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+															"language": {
+																Type:     schema.TypeString,
+																Optional: true,
+																Default:  "",
+															},
+															"ad": {
+																Type:     schema.TypeBool,
+																Optional: true,
+																Default:  false,
+															},
+														},
+													},
+												},
+												"teletext": {
+													Type:     schema.TypeList,
+													Optional: true,
+													MinItems: 0,
+													MaxItems: 1,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+															"page": {
+																Type:     schema.TypeString,
+																Required: true,
+															},
+															"language": {
+																Type:     schema.TypeString,
+																Optional: true,
+																Default:  "",
+															},
+															"sdh": {
+																Type:     schema.TypeBool,
+																Optional: true,
+																Default:  false,
+															},
+														},
+													},
+												},
+											},
+										},
 									},
 								},
 							},
 						},
-
-						// "rtmp": {
-						// 	Type:     schema.TypeList,
-						// 	Optional: true,
-						// 	MinItems: 0,
-						// 	MaxItems: 1,
-						// 	Elem:     &schema.Resource{},
-						// },
+						"rtmp": {
+							Type:     schema.TypeList,
+							Optional: true,
+							MinItems: 0,
+							MaxItems: 1,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"overrides": {
+										Type:     schema.TypeList,
+										Optional: true,
+										MinItems: 0,
+										MaxItems: 10,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+												"type": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+												"enabled": {
+													Type:     schema.TypeBool,
+													Optional: true,
+													Default:  true,
+												},
+												"audio": {
+													Type:     schema.TypeList,
+													Optional: true,
+													MinItems: 0,
+													MaxItems: 1,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+															"language": {
+																Type:     schema.TypeString,
+																Optional: true,
+																Default:  "",
+															},
+															"ad": {
+																Type:     schema.TypeString,
+																Optional: true,
+																Default:  false,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
 					},
 				},
 			},
@@ -106,23 +249,82 @@ func marshallModelInput(d *schema.ResourceData) (*Input, error) {
 			Enabled: st["enabled"].(bool),
 		}
 
+		// Manage srt
 		if srt, ok := st["srt"]; ok {
 			srts := srt.([]interface{})
 			sr := srts[0].(map[string]interface{})
-			log.Println(sr)
-
 			str.Type = "srt"
 
 			srtt := Srt{
-				ConnectionType: sr["connection_type"].(string),
-				Latency:        sr["latency"].(int),
+				Latency: sr["latency"].(int),
 			}
 
-			if sr["connection_type"] == "listener" {
-				listener := Listener{}
-				srtt.Listener = &listener
+			// Manage srt listener/caller
+			if srta, ok := sr["listener"]; ok {
+				srtas := srta.([]interface{})
+				if len(srtas) > 0 {
+					srtt.ConnectionType = "listener"
+					listener := Listener{}
+					first := srtas[0]
+					if first != nil {
+						srt := first.(map[string]interface{})
+						cidrs := srt["cidr"].([]interface{})
+						for _, cidr := range cidrs {
+							listener.Cidr = append(listener.Cidr, cidr.(string))
+						}
+					}
+					srtt.Listener = &listener
+				}
+
+			}
+			if srta, ok := sr["caller"]; ok {
+				srtas := srta.([]interface{})
+				if len(srtas) > 0 {
+					srtt.ConnectionType = "caller"
+					caller := Caller{}
+					first := srtas[0]
+					if first != nil {
+						srt := first.(map[string]interface{})
+						caller.Address = srt["address"].(string)
+						caller.Passphrase = srt["passphrase"].(string)
+					}
+					srtt.Caller = &caller
+				}
+			}
+
+			// Manage overrides
+			overrides := sr["overrides"].([]interface{})
+			for _, override := range overrides {
+				over := override.(map[string]interface{})
+				ov := Override{
+					Pid:     over["pid"].(int),
+					Type:    over["type"].(string),
+					Enabled: over["enabled"].(bool),
+				}
+				srtt.Overrides = append(srtt.Overrides, ov)
 			}
 			str.Srt = &srtt
+
+			// Manage rtmp
+		} else if rtmp, ok := st["rtmp"]; ok {
+			rtmps := rtmp.([]interface{})
+			rt := rtmps[0].(map[string]interface{})
+			str.Type = "rtmp"
+
+			rtt := Rtmp{}
+
+			// Manage overrides
+			overrides := rt["overrides"].([]interface{})
+			for _, override := range overrides {
+				over := override.(map[string]interface{})
+				ov := Override{
+					Pid:     0,
+					Type:    over["type"].(string),
+					Enabled: over["enabled"].(bool),
+				}
+				rtt.Overrides = append(rtt.Overrides, ov)
+			}
+			str.Rtmp = &rtt
 
 		}
 		ve.Streams = append(ve.Streams, str)
@@ -254,7 +456,7 @@ func flattenInputStreams(streams *[]Stream) []interface{} {
 
 func flattenSrt(srt *Srt) []interface{} {
 	c := make(map[string]interface{})
-	c["connection_type"] = (*srt).ConnectionType
+	//c["connection_type"] = (*srt).ConnectionType
 	c["latency"] = (*srt).Latency
 
 	return []interface{}{c}
