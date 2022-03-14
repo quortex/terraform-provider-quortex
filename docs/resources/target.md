@@ -1,10 +1,10 @@
 ---
-page_title: "quortex_target Resource - terraform-provider-quortex"
+page_title: "quortex_ott_target Resource - terraform-provider-quortex"
 subcategory: ""
 description: |-
 ---
 
-# quortex_target
+# quortex_ott_target
 
 Manage a target resource. For more information see
 [the official documentation](https://help.quortex.io/en/)
@@ -13,15 +13,15 @@ and [the API reference](https://web.quortex.io/documentation/ott).
 ## Example Usage - basic configuration
 
 ```hcl
-resource "quortex_pool" "my_pool" {
+resource "quortex_ott_pool" "my_pool" {
   name                = "my_pool"
   streaming_countries = ["FRA"]
   input_region        = "ireland"
   published           = true
 }
 
-resource "quortex_target" "my_target_hls" {
-  pool_id          = quortex_pool.my_pool.id
+resource "quortex_ott_target" "my_target_hls" {
+  pool_id          = quortex_ott_pool.my_pool.id
   name             = "hls"
   published        = true
   identifier       = "hls"

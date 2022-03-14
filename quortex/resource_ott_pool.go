@@ -7,7 +7,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-func resourcePool() *schema.Resource {
+func resourceOttPool() *schema.Resource {
 	return &schema.Resource{
 		CreateContext: resourcePoolCreate,
 		ReadContext:   resourcePoolRead,

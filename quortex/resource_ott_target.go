@@ -7,7 +7,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-func resourceTarget() *schema.Resource {
+func resourceOttTarget() *schema.Resource {
 	return &schema.Resource{
 		CreateContext: resourceTargetCreate,
 		ReadContext:   resourceTargetRead,

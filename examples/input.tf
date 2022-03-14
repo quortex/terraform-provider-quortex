@@ -1,5 +1,5 @@
-resource "quortex_input" "my_input" {
-  pool_id    = quortex_pool.my_pool.id
+resource "quortex_ott_input" "my_input" {
+  pool_id    = quortex_ott_pool.my_pool.id
   name       = "ryan"
   published  = true
   identifier = "ryan"

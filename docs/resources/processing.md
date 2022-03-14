@@ -1,27 +1,27 @@
 ---
-page_title: "quortex_processing Resource - terraform-provider-quortex"
+page_title: "quortex_ott_processing Resource - terraform-provider-quortex"
 subcategory: ""
 description: |-
 ---
 
-# quortex_target
+# quortex_ott_processing
 
-Manage a target resource. For more information see
+Manage a processing resource. For more information see
 [the official documentation](https://help.quortex.io/en/)
 and [the API reference](https://web.quortex.io/documentation/ott).
 
 ## Example Usage - basic configuration
 
 ```hcl
-resource "quortex_pool" "my_pool" {
+resource "quortex_ott_pool" "my_pool" {
   name                = "my_pool"
   streaming_countries = ["FRA"]
   input_region        = "ireland"
   published           = true
 }
 
-resource "quortex_processing" "my_proc_hd" {
-  pool_id    = quortex_pool.my_pool.id
+resource "quortex_ott_processing" "my_proc_hd" {
+  pool_id    = quortex_ott_pool.my_pool.id
   name       = "hd"
   published  = true
   identifier = "hd"
@@ -59,7 +59,7 @@ resource "quortex_processing" "my_proc_hd" {
 
 The following arguments are required:
 
-- `pool_id` - (Required) The id of the pool on which the target will be created.
+- `pool_id` - (Required) The id of the pool on which the processing will be created.
 - `name` - (Required) This is the name of the processing.
 
 The following arguments are optional:

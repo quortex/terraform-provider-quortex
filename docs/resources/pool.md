@@ -1,10 +1,10 @@
 ---
-page_title: "quortex_pool Resource - terraform-provider-quortex"
+page_title: "quortex_ott_pool Resource - terraform-provider-quortex"
 subcategory: ""
 description: |-
 ---
 
-# quortex_pool
+# quortex_ott_pool
 
 Manage a pool resource. For more information see
 [the official documentation](https://help.quortex.io/en/)
@@ -13,7 +13,7 @@ and [the API reference](https://web.quortex.io/documentation/ott).
 ## Example Usage - basic configuration
 
 ```hcl
-resource "quortex_pool" "my_pool" {
+resource "quortex_ott_pool" "my_pool" {
   name                = "my_pool"
   streaming_countries = ["FRA"]
   input_region        = "ireland"

@@ -7,7 +7,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-func resourceProcessing() *schema.Resource {
+func resourceOttProcessing() *schema.Resource {
 	return &schema.Resource{
 		CreateContext: resourceProcessingCreate,
 		ReadContext:   resourceProcessingRead,

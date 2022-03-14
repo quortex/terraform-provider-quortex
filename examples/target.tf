@@ -1,5 +1,5 @@
-resource "quortex_target" "my_target_hls" {
-  pool_id          = quortex_pool.my_pool.id
+resource "quortex_ott_target" "my_target_hls" {
+  pool_id          = quortex_ott_pool.my_pool.id
   name             = "hls"
   published        = true
   identifier       = "hls"
@@ -9,8 +9,8 @@ resource "quortex_target" "my_target_hls" {
   container        = "ts"
 }
 
-resource "quortex_target" "my_target_dash" {
-  pool_id          = quortex_pool.my_pool.id
+resource "quortex_ott_target" "my_target_dash" {
+  pool_id          = quortex_ott_pool.my_pool.id
   name             = "dash"
   published        = true
   identifier       = "dash"
