@@ -25,12 +25,12 @@ func resourceTarget() *schema.Resource {
 			"identifier": {
 				Type:     schema.TypeString,
 				Optional: true,
-				Computed: true,
+				Default:  "",
 			},
 			"published": {
 				Type:     schema.TypeBool,
 				Optional: true,
-				Computed: true,
+				Default:  true,
 			},
 			"type": {
 				Type:     schema.TypeString,
@@ -48,7 +48,7 @@ func resourceTarget() *schema.Resource {
 			"container": {
 				Type:     schema.TypeString,
 				Optional: true,
-				Computed: true,
+				Default:  "",
 			},
 			"scte_35": {
 				Type:     schema.TypeList,
@@ -61,17 +61,16 @@ func resourceTarget() *schema.Resource {
 						"enabled": {
 							Type:     schema.TypeBool,
 							Optional: true,
-							Computed: true,
+							Default:  false,
 						},
 						"filter_type": {
 							Type:     schema.TypeString,
 							Optional: true,
-							Computed: true,
+							Default:  "deny",
 						},
 						"filter_list": {
 							Type:     schema.TypeList,
 							Optional: true,
-							Computed: true,
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
 							},

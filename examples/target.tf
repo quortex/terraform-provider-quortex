@@ -6,6 +6,7 @@ resource "quortex_target" "my_target_hls" {
   type             = "hls"
   playlist_length  = 10
   segment_duration = 6
+  container        = "ts"
 }
 
 resource "quortex_target" "my_target_dash" {
@@ -16,7 +17,5 @@ resource "quortex_target" "my_target_dash" {
   type             = "dash"
   playlist_length  = 10
   segment_duration = 6
-  scte_35 {
-    enabled = true
-  }
+  container        = "fmp4"
 }

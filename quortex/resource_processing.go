@@ -25,10 +25,12 @@ func resourceProcessing() *schema.Resource {
 			"identifier": {
 				Type:     schema.TypeString,
 				Optional: true,
+				Default:  "",
 			},
 			"published": {
 				Type:     schema.TypeBool,
 				Optional: true,
+				Default:  true,
 			},
 			"video": {
 				Type:     schema.TypeList,
@@ -69,7 +71,7 @@ func resourceProcessing() *schema.Resource {
 						},
 						"advanced": {
 							Type:     schema.TypeList,
-							Required: true,
+							Optional: true,
 							MinItems: 1,
 							MaxItems: 1,
 							Elem: &schema.Resource{
@@ -87,12 +89,12 @@ func resourceProcessing() *schema.Resource {
 									"quality": {
 										Type:     schema.TypeString,
 										Optional: true,
-										Default:  "",
+										Default:  "standard",
 									},
 									"encoding_mode": {
 										Type:     schema.TypeString,
 										Optional: true,
-										Default:  "",
+										Default:  "cbr",
 									},
 									"bframe": {
 										Type:     schema.TypeBool,
@@ -112,7 +114,7 @@ func resourceProcessing() *schema.Resource {
 									"key_frame_interval": {
 										Type:     schema.TypeInt,
 										Optional: true,
-										Default:  0,
+										Default:  2000,
 									},
 								},
 							},
@@ -154,6 +156,7 @@ func resourceProcessing() *schema.Resource {
 						"ad": {
 							Type:     schema.TypeBool,
 							Optional: true,
+							Default:  false,
 						},
 					},
 				},
@@ -172,6 +175,7 @@ func resourceProcessing() *schema.Resource {
 						"hoh": {
 							Type:     schema.TypeBool,
 							Optional: true,
+							Default:  false,
 						},
 					},
 				},

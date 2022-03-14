@@ -21,6 +21,7 @@ func resourcePool() *schema.Resource {
 			"published": {
 				Type:     schema.TypeBool,
 				Optional: true,
+				Default:  true,
 			},
 			"input_region": {
 				Type:     schema.TypeString,
