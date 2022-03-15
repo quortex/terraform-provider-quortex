@@ -7,7 +7,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-func resourcePool() *schema.Resource {
+func resourceOttPool() *schema.Resource {
 	return &schema.Resource{
 		CreateContext: resourcePoolCreate,
 		ReadContext:   resourcePoolRead,
@@ -21,10 +21,11 @@ func resourcePool() *schema.Resource {
 			"published": {
 				Type:     schema.TypeBool,
 				Optional: true,
+				Default:  true,
 			},
 			"input_region": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 			"streaming_countries": {
 				Type:     schema.TypeList,
@@ -87,6 +88,11 @@ func resourcePoolRead(ctx context.Context, d *schema.ResourceData, m interface{}
 	if err := d.Set("published", pool.Published); err != nil {
 		return diag.FromErr(err)
 	}
+
+	if err := d.Set("streaming_countries", pool.StreamingCountries); err != nil {
+		return diag.FromErr(err)
+	}
+
 	return diags
 }
 

@@ -1,8 +1,13 @@
-# Terraform Provider Hashicups
+# Terraform Provider Quortex
 
-This repo is a companion repo to the [Call APIs with Terraform Providers](https://learn.hashicorp.com/collections/terraform/providers) Learn collection.
+The Terraform Quortex provider is a plugin for Terraform that allows the full configuration of quortex solution.
+This provider is maintained internally by the Quortex team.
 
-In the collection, you will use the HashiCups provider as a bridge between Terraform and the HashiCups API. Then, extend Terraform by recreating the HashiCups provider. By the end of this collection, you will be able to take these intuitions to create your own custom Terraform provider.
+## Documentation
+
+Full, comprehensive documentation is available on the Terraform website:
+
+https://registry.terraform.io/providers/quortex/quortex/latest/docs
 
 ## Build provider
 
