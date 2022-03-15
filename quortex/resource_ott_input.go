@@ -442,34 +442,91 @@ func resourceInputDelete(ctx context.Context, d *schema.ResourceData, m interfac
 func flattenInputStreams(streams *[]Stream) []interface{} {
 	if streams != nil {
 		ois := make([]interface{}, len(*streams))
-
 		for i, stream := range *streams {
 			oi := make(map[string]interface{})
-
 			oi["uuid"] = stream.Uuid
 			oi["name"] = stream.Name
 			oi["enabled"] = stream.Enabled
-			oi["srt"] = flattenSrt(stream.Srt)
-			//oi["rtmp"] = flattenRtmp(stream.Rtmp)
+			if stream.Type == "srt" {
+				oi["srt"] = flattenSrt(stream.Srt)
+			} else if stream.Type == "rtmp" {
+				oi["rtmp"] = flattenRtmp(stream.Rtmp)
+			}
 			ois[i] = oi
 		}
-
 		return ois
 	}
-
 	return make([]interface{}, 0)
 }
 
 func flattenSrt(srt *Srt) []interface{} {
 	c := make(map[string]interface{})
-	//c["connection_type"] = (*srt).ConnectionType
-	c["latency"] = (*srt).Latency
+	c["latency"] = srt.Latency
+	if srt.ConnectionType == "listener" {
+		c["listener"] = flattenListener(srt.Listener)
+	} else if srt.ConnectionType == "caller" {
+		c["caller"] = flattenCaller(srt.Caller)
+	}
+	c["overrides"] = flattenOverrides(&srt.Overrides)
+	return []interface{}{c}
+}
 
+func flattenListener(caller *Listener) []interface{} {
+	c := make(map[string]interface{})
+	c["cidr"] = caller.Cidr
+	return []interface{}{c}
+}
+
+func flattenCaller(caller *Caller) []interface{} {
+	c := make(map[string]interface{})
+	c["address"] = caller.Address
+	c["passphrase"] = caller.Passphrase
 	return []interface{}{c}
 }
 
 func flattenRtmp(rtmp *Rtmp) []interface{} {
 	c := make(map[string]interface{})
+	c["overrides"] = flattenOverrides(&rtmp.Overrides)
+	return []interface{}{c}
+}
 
+func flattenOverrides(overrides *[]Override) []interface{} {
+	if overrides != nil {
+		ois := make([]interface{}, len(*overrides))
+		for i, override := range *overrides {
+			oi := make(map[string]interface{})
+			oi["type"] = override.Type
+			oi["enabled"] = override.Enabled
+			if override.Pid != 0 {
+				oi["pid"] = override.Pid
+			}
+
+			if override.OverAudio != nil {
+				oi["audio"] = flattenOverAudio(override.OverAudio)
+			}
+
+			if override.OverTeletext != nil {
+				oi["teletext"] = flattenOverTeletext(override.OverTeletext)
+			}
+
+			ois[i] = oi
+		}
+		return ois
+	}
+	return make([]interface{}, 0)
+}
+
+func flattenOverAudio(overaudio *OverAudio) []interface{} {
+	c := make(map[string]interface{})
+	c["language"] = overaudio.Language
+	c["ad"] = overaudio.Ad
+	return []interface{}{c}
+}
+
+func flattenOverTeletext(overteletext *OverTeletext) []interface{} {
+	c := make(map[string]interface{})
+	c["page"] = overteletext.Page
+	c["language"] = overteletext.Language
+	c["sdh"] = overteletext.Sdh
 	return []interface{}{c}
 }
