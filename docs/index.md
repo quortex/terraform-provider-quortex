@@ -17,7 +17,34 @@ description: |-
 
 ### Optional
 
-- **api_key** (String, Sensitive)
+- **api_key** (Block List, Max: 1) (see [below for nested schema](#nestedblock--api_key))
+- **basic_auth** (Block List, Max: 1) (see [below for nested schema](#nestedblock--basic_auth))
 - **host** (String)
+- **oauth** (Block List, Max: 1) (see [below for nested schema](#nestedblock--oauth))
+
+<a id="nestedblock--api_key"></a>
+### Nested Schema for `api_key`
+
+Optional:
+
+- **api_key** (String, Sensitive)
+- **auth_server** (String)
+
+
+<a id="nestedblock--basic_auth"></a>
+### Nested Schema for `basic_auth`
+
+Optional:
+
 - **password** (String, Sensitive)
 - **username** (String)
+
+
+<a id="nestedblock--oauth"></a>
+### Nested Schema for `oauth`
+
+Optional:
+
+- **auth_server** (String)
+- **client_id** (String)
+- **client_secret** (String)

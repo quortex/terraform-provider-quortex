@@ -16,22 +16,72 @@ func Provider() *schema.Provider {
 				Optional:    true,
 				DefaultFunc: schema.EnvDefaultFunc("QUORTEX_HOST", nil),
 			},
-			"username": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				DefaultFunc: schema.EnvDefaultFunc("QUORTEX_USERNAME", nil),
-			},
-			"password": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Sensitive:   true,
-				DefaultFunc: schema.EnvDefaultFunc("QUORTEX_PASSWORD", nil),
+			"oauth": {
+				Type:     schema.TypeList,
+				Optional: true,
+				MinItems: 0,
+				MaxItems: 1,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"auth_server": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							DefaultFunc: schema.EnvDefaultFunc("QUORTEX_AUTH_SERVER", nil),
+						},
+						"client_id": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							DefaultFunc: schema.EnvDefaultFunc("QUORTEX_CLIENT_ID", nil),
+						},
+						"client_secret": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							DefaultFunc: schema.EnvDefaultFunc("QUORTEX_CLIENT_SECRET", nil),
+						},
+					},
+				},
 			},
 			"api_key": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Sensitive:   true,
-				DefaultFunc: schema.EnvDefaultFunc("QUORTEX_APIKEY", nil),
+				Type:     schema.TypeList,
+				Optional: true,
+				MinItems: 0,
+				MaxItems: 1,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"auth_server": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							DefaultFunc: schema.EnvDefaultFunc("QUORTEX_AUTH_SERVER", nil),
+						},
+						"api_key": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Sensitive:   true,
+							DefaultFunc: schema.EnvDefaultFunc("QUORTEX_APIKEY", nil),
+						},
+					},
+				},
+			},
+			"basic_auth": {
+				Type:     schema.TypeList,
+				Optional: true,
+				MinItems: 0,
+				MaxItems: 1,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"username": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							DefaultFunc: schema.EnvDefaultFunc("QUORTEX_USERNAME", nil),
+						},
+						"password": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Sensitive:   true,
+							DefaultFunc: schema.EnvDefaultFunc("QUORTEX_PASSWORD", nil),
+						},
+					},
+				},
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
@@ -46,52 +96,76 @@ func Provider() *schema.Provider {
 }
 
 func providerConfigure(ctx context.Context, d *schema.ResourceData) (interface{}, diag.Diagnostics) {
-	username := d.Get("username").(string)
-	password := d.Get("password").(string)
-	apikey := d.Get("api_key").(string)
-
+	var diags diag.Diagnostics
 	var host *string
-
 	hVal, ok := d.GetOk("host")
 	if ok {
 		tempHost := hVal.(string)
 		host = &tempHost
 	}
 
-	// Warning or errors can be collected in a slice type
-	var diags diag.Diagnostics
+	oauths := d.Get("oauth").([]interface{})
+	apikeys := d.Get("api_key").([]interface{})
+	basicauths := d.Get("basic_auth").([]interface{})
 
-	if (username != "") && (password != "") {
-		c, err := NewClient(host, &username, &password, nil)
-		if err != nil {
-			diags = append(diags, diag.Diagnostic{
-				Severity: diag.Error,
-				Summary:  "Unable to create Quortex client",
-				Detail:   "Unable to authenticate user for authenticated Quortex client with username password",
-			})
+	for _, oauth := range oauths {
+		oaut := oauth.(map[string]interface{})
+		authserver := oaut["auth_server"].(string)
+		clientid := oaut["client_id"].(string)
+		clientsecret := oaut["client_secret"].(string)
+		if (authserver != "") && (clientid != "") && (clientsecret != "") {
+			c, err := NewClientOauth(host, &authserver, &clientid, &clientsecret)
+			if err != nil {
+				diags = append(diags, diag.Diagnostic{
+					Severity: diag.Error,
+					Summary:  "Unable to create Quortex client",
+					Detail:   "Unable to authenticate user for authenticated Quortex client with oauth auth",
+				})
 
-			return nil, diags
+				return nil, diags
+			}
+			return c, diags
 		}
-
-		return c, diags
 	}
 
-	if apikey != "" {
-		c, err := NewClient(host, nil, nil, &apikey)
-		if err != nil {
-			diags = append(diags, diag.Diagnostic{
-				Severity: diag.Error,
-				Summary:  "Unable to create Quortex client",
-				Detail:   "Unable to authenticate user for authenticated Quortex client with api key",
-			})
-
-			return nil, diags
+	for _, apikey := range apikeys {
+		apike := apikey.(map[string]interface{})
+		key := apike["api_key"].(string)
+		authserver := apike["auth_server"].(string)
+		if key != "" {
+			c, err := NewClientApiKey(host, &key, &authserver)
+			if err != nil {
+				diags = append(diags, diag.Diagnostic{
+					Severity: diag.Error,
+					Summary:  "Unable to create Quortex client",
+					Detail:   "Unable to authenticate user for authenticated Quortex client with api key",
+				})
+				return nil, diags
+			}
+			return c, diags
 		}
-
-		return c, diags
 	}
 
-	c, err := NewClient(host, nil, nil, nil)
+	for _, basicauth := range basicauths {
+		basicaut := basicauth.(map[string]interface{})
+		username := basicaut["username"].(string)
+		password := basicaut["password"].(string)
+		if (username != "") && (password != "") {
+			c, err := NewClientBasicAuth(host, &username, &password)
+			if err != nil {
+				diags = append(diags, diag.Diagnostic{
+					Severity: diag.Error,
+					Summary:  "Unable to create Quortex client",
+					Detail:   "Unable to authenticate user for authenticated Quortex client with basic auth",
+				})
+
+				return nil, diags
+			}
+			return c, diags
+		}
+	}
+
+	c, err := NewClientUnprotected(host)
 	if err != nil {
 		diags = append(diags, diag.Diagnostic{
 			Severity: diag.Error,

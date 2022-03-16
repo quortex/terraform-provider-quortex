@@ -8,6 +8,8 @@ terraform {
 }
 
 provider "quortex" {
-  host    = "https://my_host"
-  api_key = "my_api_key"
+  host = "https://my_host"
+  api_key {
+    api_key = "my_api_key"
+  }
 }

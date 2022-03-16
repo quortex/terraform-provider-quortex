@@ -35,6 +35,20 @@ type QxAuthResponse struct {
 	Expire string `json:"expires_at"`
 }
 
+// OauthStruct -
+type OauthStruct struct {
+	ClientId     string `json:"client_id"`
+	ClientSecret string `json:"client_secret"`
+	Audience     string `json:"audience"`
+	GrantType    string `json:"grant_type"`
+}
+
+// OauthResponse -
+type OauthResponse struct {
+	AccessToken string `json:"access_token"`
+	TokenType   string `json:"token_type"`
+}
+
 // AuthResponse -
 type AuthResponse struct {
 	UserID   int    `json:"user_id"`
@@ -47,43 +61,102 @@ func basicAuth(username, password string) string {
 	return base64.StdEncoding.EncodeToString([]byte(auth))
 }
 
-// NewClient -
-func NewClient(host, username *string, password *string, apikey *string) (*Client, error) {
+// NewClientApiKey -
+func NewClientApiKey(host *string, apikey *string, authserver *string) (*Client, error) {
 	c := Client{
 		HTTPClient: &http.Client{Timeout: 10 * time.Second},
 		HostURL:    *host,
 	}
 
-	if apikey != nil {
-		// form request body
-		rb, err := json.Marshal(QxAuthStruct{
-			ApiKey: *apikey,
-		})
-		if err != nil {
-			return nil, err
-		}
-
-		// authenticate
-		req, err := http.NewRequest("POST", fmt.Sprintf("%s/1.0/token", c.HostURL), strings.NewReader(string(rb)))
-		if err != nil {
-			return nil, err
-		}
-		log.Println(req)
-
-		body, err := c.doRequest(req)
-
-		// parse response body
-		ar := QxAuthResponse{}
-		err = json.Unmarshal(body, &ar)
-		if err != nil {
-			return nil, err
-		}
-
-		c.Token = "Bearer " + ar.Token
+	// form request body
+	rb, err := json.Marshal(QxAuthStruct{
+		ApiKey: *apikey,
+	})
+	if err != nil {
+		return nil, err
 	}
 
-	if (username != nil) && (password != nil) {
-		c.Token = "Basic " + basicAuth(*username, *password)
+	// authenticate
+	authent := c.HostURL
+	if *authserver != "" {
+		authent = *authserver
+	}
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s/1.0/token", authent), strings.NewReader(string(rb)))
+	if err != nil {
+		return nil, err
+	}
+	log.Println(req)
+
+	body, err := c.doRequest(req)
+
+	// parse response body
+	ar := QxAuthResponse{}
+	err = json.Unmarshal(body, &ar)
+	if err != nil {
+		return nil, err
+	}
+
+	c.Token = "Bearer " + ar.Token
+
+	return &c, nil
+}
+
+// NewClientOauth -
+func NewClientOauth(host *string, authserver *string, clientid *string, clientsecret *string) (*Client, error) {
+	c := Client{
+		HTTPClient: &http.Client{Timeout: 10 * time.Second},
+		HostURL:    *host,
+	}
+
+	// form request body
+	rb, err := json.Marshal(OauthStruct{
+		ClientId:     *clientid,
+		ClientSecret: *clientsecret,
+		Audience:     fmt.Sprintf("%s/", *host),
+		GrantType:    "client_credentials",
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	// authenticate
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s/oauth/token", *authserver), strings.NewReader(string(rb)))
+	if err != nil {
+		return nil, err
+	}
+	log.Println(req)
+
+	body, err := c.doRequest(req)
+
+	// parse response body
+	ar := OauthResponse{}
+	err = json.Unmarshal(body, &ar)
+	if err != nil {
+		return nil, err
+	}
+
+	c.Token = "Bearer " + ar.AccessToken
+
+	return &c, nil
+}
+
+// NewClientBasicAuth -
+func NewClientBasicAuth(host *string, username *string, password *string) (*Client, error) {
+	c := Client{
+		HTTPClient: &http.Client{Timeout: 10 * time.Second},
+		HostURL:    *host,
+	}
+
+	c.Token = "Basic " + basicAuth(*username, *password)
+
+	return &c, nil
+}
+
+// NewClientUnprotected -
+func NewClientUnprotected(host *string) (*Client, error) {
+	c := Client{
+		HTTPClient: &http.Client{Timeout: 10 * time.Second},
+		HostURL:    *host,
 	}
 
 	return &c, nil
