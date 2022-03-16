@@ -120,7 +120,7 @@ func NewClientOauth(host *string, authserver *string, clientid *string, clientse
 	}
 
 	// authenticate
-	req, err := http.NewRequest("POST", fmt.Sprintf("%s", *authserver), strings.NewReader(string(rb)))
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s/oauth/token", *authserver), strings.NewReader(string(rb)))
 	if err != nil {
 		return nil, err
 	}
