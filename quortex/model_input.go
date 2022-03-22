@@ -18,7 +18,7 @@ type Override struct {
 	Type         string        `json:"type"`
 	Enabled      bool          `json:"enabled,omitempty"`
 	OverAudio    *OverAudio    `json:"audio,omitempty"`
-	OverTeletext *OverTeletext `json:"audio,omitempty"`
+	OverTeletext *OverTeletext `json:"teletext,omitempty"`
 }
 
 // Caller -
@@ -48,12 +48,14 @@ type Rtmp struct {
 
 // Stream -
 type Stream struct {
-	Uuid    string `json:"uuid,omitempty"`
-	Name    string `json:"name"`
-	Enabled bool   `json:"enabled,omitempty"`
-	Type    string `json:"type"`
-	Srt     *Srt   `json:"srt,omitempty"`
-	Rtmp    *Rtmp  `json:"rtmp,omitempty"`
+	Uuid        string `json:"uuid,omitempty"`
+	Name        string `json:"name"`
+	Enabled     bool   `json:"enabled,omitempty"`
+	LogoUrl     string `json:"logo_url,omitempty"`
+	FallbackUrl string `json:"fallback_url,omitempty"`
+	Type        string `json:"type"`
+	Srt         *Srt   `json:"srt,omitempty"`
+	Rtmp        *Rtmp  `json:"rtmp,omitempty"`
 }
 
 // Input -

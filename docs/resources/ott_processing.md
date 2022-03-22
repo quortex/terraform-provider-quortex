@@ -91,6 +91,7 @@ Optional:
 - **encoding_mode** (String)
 - **key_frame_interval** (Number)
 - **level** (String)
+- **logo_enabled** (Boolean)
 - **maxrate** (Number)
 - **profile** (String)
 - **quality** (String)

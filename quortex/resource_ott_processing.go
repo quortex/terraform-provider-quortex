@@ -116,6 +116,11 @@ func resourceOttProcessing() *schema.Resource {
 										Optional: true,
 										Default:  2000,
 									},
+									"logo_enabled": {
+										Type:     schema.TypeBool,
+										Optional: true,
+										Default:  false,
+									},
 								},
 							},
 						},
@@ -241,6 +246,7 @@ func marshallModelProcessing(d *schema.ResourceData) (*Processing, error) {
 						ad.BframeNumber = adv["bframe_number"].(int)
 						ad.Maxrate = adv["maxrate"].(int)
 						ad.KeyFrameIntervalMs = adv["key_frame_interval"].(int)
+						ad.LogoEnabled = adv["logo_enabled"].(bool)
 					}
 				}
 			}
@@ -414,6 +420,7 @@ func flattenAdvanced(advanced *Advanced) []interface{} {
 	c["bframe_number"] = (*advanced).BframeNumber
 	c["maxrate"] = (*advanced).Maxrate
 	c["key_frame_interval"] = (*advanced).KeyFrameIntervalMs
+	c["logo_enabled"] = (*advanced).LogoEnabled
 
 	return []interface{}{c}
 }
