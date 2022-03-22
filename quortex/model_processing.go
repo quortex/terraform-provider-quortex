@@ -16,6 +16,7 @@ type Advanced struct {
 	BframeNumber       int    `json:"bframe_number,omitempty"`
 	Maxrate            int    `json:"maxrate,omitempty"`
 	KeyFrameIntervalMs int    `json:"key_frame_interval_ms,omitempty"`
+	LogoEnabled        bool   `json:"logo_enabled,omitempty"`
 }
 
 // VideoMedia -
