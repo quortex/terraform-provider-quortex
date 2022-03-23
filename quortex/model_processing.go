@@ -54,4 +54,5 @@ type Processing struct {
 	VideoMedias    []VideoMedia    `json:"video_medias,omitempty"`
 	AudioMedias    []AudioMedia    `json:"audio_medias,omitempty"`
 	SubtitleMedias []SubtitleMedia `json:"subtitle_medias,omitempty"`
+	Labels         []string        `json:"labels,omitempty"`
 }

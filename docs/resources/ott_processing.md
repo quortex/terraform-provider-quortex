@@ -25,6 +25,7 @@ description: |-
 - **audio** (Block List, Max: 10) (see [below for nested schema](#nestedblock--audio))
 - **id** (String) The ID of this resource.
 - **identifier** (String)
+- **labels** (List of String)
 - **published** (Boolean)
 - **subtitle** (Block List, Max: 10) (see [below for nested schema](#nestedblock--subtitle))
 - **video** (Block List, Max: 10) (see [below for nested schema](#nestedblock--video))

@@ -185,6 +185,13 @@ func resourceOttProcessing() *schema.Resource {
 					},
 				},
 			},
+			"labels": {
+				Type:     schema.TypeList,
+				Optional: true,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
+			},
 		},
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
@@ -205,6 +212,11 @@ func marshallModelProcessing(d *schema.ResourceData) (*Processing, error) {
 		VideoMedias:    []VideoMedia{},
 		AudioMedias:    []AudioMedia{},
 		SubtitleMedias: []SubtitleMedia{},
+	}
+
+	labels := d.Get("labels").([]interface{})
+	for _, label := range labels {
+		ve.Labels = append(ve.Labels, label.(string))
 	}
 
 	for _, video := range videos {
@@ -342,6 +354,10 @@ func resourceProcessingRead(ctx context.Context, d *schema.ResourceData, m inter
 
 	subtitles := flattenProcessingSubtitles(&processing.SubtitleMedias)
 	if err := d.Set("subtitle", subtitles); err != nil {
+		return diag.FromErr(err)
+	}
+
+	if err := d.Set("labels", processing.Labels); err != nil {
 		return diag.FromErr(err)
 	}
 

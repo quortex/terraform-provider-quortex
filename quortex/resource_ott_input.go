@@ -230,6 +230,13 @@ func resourceOttInput() *schema.Resource {
 					},
 				},
 			},
+			"labels": {
+				Type:     schema.TypeList,
+				Optional: true,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
+			},
 		},
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
@@ -246,6 +253,11 @@ func marshallModelInput(d *schema.ResourceData) (*Input, error) {
 		Identifier: d.Get("identifier").(string),
 		Published:  d.Get("published").(bool),
 		Streams:    []Stream{},
+	}
+
+	labels := d.Get("labels").([]interface{})
+	for _, label := range labels {
+		ve.Labels = append(ve.Labels, label.(string))
 	}
 
 	for _, stream := range streams {
@@ -400,6 +412,10 @@ func resourceInputRead(ctx context.Context, d *schema.ResourceData, m interface{
 
 	streams := flattenInputStreams(&input.Streams)
 	if err := d.Set("stream", streams); err != nil {
+		return diag.FromErr(err)
+	}
+
+	if err := d.Set("labels", input.Labels); err != nil {
 		return diag.FromErr(err)
 	}
 
