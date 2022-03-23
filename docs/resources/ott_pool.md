@@ -24,6 +24,16 @@ description: |-
 ### Optional
 
 - **id** (String) The ID of this resource.
+- **label** (String)
 - **published** (Boolean)
+- **time_shifting** (Block List, Max: 1) (see [below for nested schema](#nestedblock--time_shifting))
+
+<a id="nestedblock--time_shifting"></a>
+### Nested Schema for `time_shifting`
+
+Optional:
+
+- **enabled** (Boolean)
+- **startover_duration** (Number)
 
 
