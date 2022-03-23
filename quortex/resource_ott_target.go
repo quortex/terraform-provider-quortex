@@ -78,6 +78,20 @@ func resourceOttTarget() *schema.Resource {
 					},
 				},
 			},
+			"input_label_restriction": {
+				Type:     schema.TypeList,
+				Optional: true,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
+			},
+			"processing_label_restriction": {
+				Type:     schema.TypeList,
+				Optional: true,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
+			},
 		},
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
@@ -96,6 +110,14 @@ func marshallModelTarget(d *schema.ResourceData) (*Target, error) {
 		SegmentDuration: d.Get("segment_duration").(float64),
 		PlaylistLength:  d.Get("playlist_length").(int),
 		Container:       d.Get("container").(string),
+	}
+	ilrs := d.Get("input_label_restriction").([]interface{})
+	for _, ilr := range ilrs {
+		ve.InputLabelRestriction = append(ve.InputLabelRestriction, ilr.(string))
+	}
+	plrs := d.Get("processing_label_restriction").([]interface{})
+	for _, plr := range plrs {
+		ve.ProcessingLabelRestriction = append(ve.ProcessingLabelRestriction, plr.(string))
 	}
 
 	for _, scte35 := range scte35s {
@@ -181,6 +203,14 @@ func resourceTargetRead(ctx context.Context, d *schema.ResourceData, m interface
 
 	scte35s := flattenTargetScte35(target.Scte35)
 	if err := d.Set("scte_35", scte35s); err != nil {
+		return diag.FromErr(err)
+	}
+
+	if err := d.Set("input_label_restriction", target.InputLabelRestriction); err != nil {
+		return diag.FromErr(err)
+	}
+
+	if err := d.Set("processing_label_restriction", target.ProcessingLabelRestriction); err != nil {
 		return diag.FromErr(err)
 	}
 

@@ -65,4 +65,5 @@ type Input struct {
 	Identifier string   `json:"identifier,omitempty"`
 	Published  bool     `json:"published"`
 	Streams    []Stream `json:"streams,omitempty"`
+	Labels     []string `json:"labels,omitempty"`
 }

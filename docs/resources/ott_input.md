@@ -24,6 +24,7 @@ description: |-
 
 - **id** (String) The ID of this resource.
 - **identifier** (String)
+- **labels** (List of String)
 - **published** (Boolean)
 - **stream** (Block List, Max: 2) (see [below for nested schema](#nestedblock--stream))
 
