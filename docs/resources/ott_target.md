@@ -26,12 +26,41 @@ description: |-
 ### Optional
 
 - **container** (String)
+- **encryption_dynamic** (Block List, Max: 1) (see [below for nested schema](#nestedblock--encryption_dynamic))
 - **id** (String) The ID of this resource.
 - **identifier** (String)
 - **input_label_restriction** (List of String)
 - **processing_label_restriction** (List of String)
 - **published** (Boolean)
 - **scte_35** (Block List, Max: 1) (see [below for nested schema](#nestedblock--scte_35))
+
+<a id="nestedblock--encryption_dynamic"></a>
+### Nested Schema for `encryption_dynamic`
+
+Required:
+
+- **content_id** (String)
+- **drm_merchant_uuid** (String)
+
+Optional:
+
+- **encryption** (Block List, Max: 5) (see [below for nested schema](#nestedblock--encryption_dynamic--encryption))
+
+<a id="nestedblock--encryption_dynamic--encryption"></a>
+### Nested Schema for `encryption_dynamic.encryption`
+
+Required:
+
+- **iv** (String)
+- **iv_mode** (String)
+- **labels** (List of String)
+- **stream_type** (String)
+
+Read-Only:
+
+- **uuid** (String)
+
+
 
 <a id="nestedblock--scte_35"></a>
 ### Nested Schema for `scte_35`

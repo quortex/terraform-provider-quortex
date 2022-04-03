@@ -78,6 +78,60 @@ func resourceOttTarget() *schema.Resource {
 					},
 				},
 			},
+			"encryption_dynamic": {
+				Type:     schema.TypeList,
+				Optional: true,
+				Computed: true,
+				MinItems: 0,
+				MaxItems: 1,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"content_id": {
+							Type:     schema.TypeString,
+							Required: true,
+						},
+						"drm_merchant_uuid": {
+							Type:     schema.TypeString,
+							Required: true,
+							ForceNew: true,
+						},
+						"encryption": {
+							Type:     schema.TypeList,
+							Optional: true,
+							Computed: true,
+							MinItems: 0,
+							MaxItems: 5,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"uuid": {
+										Type:     schema.TypeString,
+										Computed: true,
+									},
+									"labels": {
+										Type:     schema.TypeList,
+										Required: true,
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+										},
+									},
+									"iv": {
+										Type:     schema.TypeString,
+										Required: true,
+									},
+									"iv_mode": {
+										Type:     schema.TypeString,
+										Required: true,
+									},
+									"stream_type": {
+										Type:     schema.TypeString,
+										Required: true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
 			"input_label_restriction": {
 				Type:     schema.TypeList,
 				Optional: true,
@@ -101,7 +155,6 @@ func resourceOttTarget() *schema.Resource {
 
 func marshallModelTarget(d *schema.ResourceData) (*Target, error) {
 
-	scte35s := d.Get("scte_35").([]interface{})
 	ve := Target{
 		Name:            d.Get("name").(string),
 		Identifier:      d.Get("identifier").(string),
@@ -120,6 +173,7 @@ func marshallModelTarget(d *schema.ResourceData) (*Target, error) {
 		ve.ProcessingLabelRestriction = append(ve.ProcessingLabelRestriction, plr.(string))
 	}
 
+	scte35s := d.Get("scte_35").([]interface{})
 	for _, scte35 := range scte35s {
 		scte := scte35.(map[string]interface{})
 		sc := Scte35{
@@ -131,6 +185,36 @@ func marshallModelTarget(d *schema.ResourceData) (*Target, error) {
 			sc.FilterList = append(sc.FilterList, filter.(string))
 		}
 		ve.Scte35 = &sc
+	}
+
+	encdyns := d.Get("encryption_dynamic").([]interface{})
+	for _, encdyn := range encdyns {
+		encdy := encdyn.(map[string]interface{})
+		ed := EncryptionDynamic{
+			ContentId:       encdy["content_id"].(string),
+			DrmMerchantUuid: encdy["drm_merchant_uuid"].(string),
+		}
+		ve.EncryptionType = "dynamic"
+
+		// Manage encryption
+		encrs := encdy["encryption"].([]interface{})
+		for _, encr := range encrs {
+			enc := encr.(map[string]interface{})
+			en := Encryption{
+				Uuid:       enc["uuid"].(string),
+				Iv:         enc["iv"].(string),
+				IvMode:     enc["iv_mode"].(string),
+				StreamType: enc["stream_type"].(string),
+			}
+
+			labels := enc["labels"].([]interface{})
+			for _, label := range labels {
+				en.Labels = append(en.Labels, label.(string))
+			}
+
+			ed.Encryption = append(ed.Encryption, en)
+		}
+		ve.EncryptionDynamic = &ed
 	}
 
 	return &ve, nil
@@ -214,6 +298,11 @@ func resourceTargetRead(ctx context.Context, d *schema.ResourceData, m interface
 		return diag.FromErr(err)
 	}
 
+	encdyns := flattenTargetEncryptionDynamic(target.EncryptionDynamic)
+	if err := d.Set("encryption_dynamic", encdyns); err != nil {
+		return diag.FromErr(err)
+	}
+
 	return diags
 }
 
@@ -269,4 +358,34 @@ func flattenTargetScte35(scte35 *Scte35) []interface{} {
 		c["filter_list"] = scte35.FilterList
 	}
 	return []interface{}{c}
+}
+
+func flattenTargetEncryptionDynamic(enc *EncryptionDynamic) []interface{} {
+
+	c := make(map[string]interface{})
+	if enc != nil {
+		c["content_id"] = enc.ContentId
+		c["drm_merchant_uuid"] = enc.DrmMerchantUuid
+		c["encryption"] = flattenTargetEncryption(&enc.Encryption)
+	}
+	return []interface{}{c}
+}
+
+func flattenTargetEncryption(enc *[]Encryption) []interface{} {
+	if enc != nil {
+		ois := make([]interface{}, len(*enc))
+
+		for i, en := range *enc {
+			oi := make(map[string]interface{})
+			oi["uuid"] = en.Uuid
+			oi["iv"] = en.Iv
+			oi["iv_mode"] = en.IvMode
+			oi["stream_type"] = en.StreamType
+			oi["labels"] = en.Labels
+			ois[i] = oi
+		}
+		return ois
+	}
+
+	return make([]interface{}, 0)
 }
