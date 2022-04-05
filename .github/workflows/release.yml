@@ -42,3 +42,10 @@ jobs:
           GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
           # GitHub sets this automatically
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Google Chat Notification
+        uses: Co-qn/google-chat-notification@releases/v1
+        with:
+          name: Build
+          url: ${{ secrets.GOOGLE_CHAT_WEBHOOK }}
+          status: ${{ job.status }}
+        if: always()

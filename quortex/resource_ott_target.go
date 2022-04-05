@@ -89,6 +89,7 @@ func resourceOttTarget() *schema.Resource {
 						"content_id": {
 							Type:     schema.TypeString,
 							Required: true,
+							ForceNew: true,
 						},
 						"drm_merchant_uuid": {
 							Type:     schema.TypeString,
@@ -116,11 +117,11 @@ func resourceOttTarget() *schema.Resource {
 									},
 									"iv": {
 										Type:     schema.TypeString,
-										Required: true,
+										Optional: true,
 									},
 									"iv_mode": {
 										Type:     schema.TypeString,
-										Required: true,
+										Optional: true,
 									},
 									"stream_type": {
 										Type:     schema.TypeString,
