@@ -195,7 +195,6 @@ func marshallModelTarget(d *schema.ResourceData) (*Target, error) {
 			ContentId:       encdy["content_id"].(string),
 			DrmMerchantUuid: encdy["drm_merchant_uuid"].(string),
 		}
-		ve.EncryptionType = "dynamic"
 
 		// Manage encryption
 		encrs := encdy["encryption"].([]interface{})
@@ -215,7 +214,10 @@ func marshallModelTarget(d *schema.ResourceData) (*Target, error) {
 
 			ed.Encryption = append(ed.Encryption, en)
 		}
-		ve.EncryptionDynamic = &ed
+		if ed.ContentId != "" {
+			ve.EncryptionDynamic = &ed
+			ve.EncryptionType = "dynamic"
+		}
 	}
 
 	return &ve, nil
