@@ -133,6 +133,64 @@ func resourceOttTarget() *schema.Resource {
 					},
 				},
 			},
+
+			"hls_advanced": {
+				Type:     schema.TypeList,
+				Optional: true,
+				Computed: true,
+				MinItems: 0,
+				MaxItems: 1,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"program_datetime": {
+							Type:     schema.TypeString,
+							Optional: true,
+							Default:  "",
+						},
+						"version": {
+							Type:     schema.TypeInt,
+							Optional: true,
+							Default:  0,
+						},
+					},
+				},
+			},
+			"dash_advanced": {
+				Type:     schema.TypeList,
+				Optional: true,
+				Computed: true,
+				MinItems: 0,
+				MaxItems: 1,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"utc_timing": {
+							Type:     schema.TypeString,
+							Optional: true,
+							Default:  "",
+						},
+						"utc_timing_server": {
+							Type:     schema.TypeString,
+							Optional: true,
+							Default:  "",
+						},
+						"base_url": {
+							Type:     schema.TypeString,
+							Optional: true,
+							Default:  "",
+						},
+						"position": {
+							Type:     schema.TypeString,
+							Optional: true,
+							Default:  "",
+						},
+						"suggested_presentation_delay": {
+							Type:     schema.TypeInt,
+							Optional: true,
+							Default:  0,
+						},
+					},
+				},
+			},
 			"input_label_restriction": {
 				Type:     schema.TypeList,
 				Optional: true,
@@ -218,6 +276,29 @@ func marshallModelTarget(d *schema.ResourceData) (*Target, error) {
 			ve.EncryptionDynamic = &ed
 			ve.EncryptionType = "dynamic"
 		}
+	}
+
+	hlsadvs := d.Get("hls_advanced").([]interface{})
+	for _, hlsadv := range hlsadvs {
+		hlsadv := hlsadv.(map[string]interface{})
+		hlsa := HlsAdvanced{
+			ProgramDatetime: hlsadv["program_datetime"].(string),
+			Version:         hlsadv["version"].(int),
+		}
+		ve.HlsAdvanced = &hlsa
+	}
+
+	dashadvs := d.Get("dash_advanced").([]interface{})
+	for _, dashadv := range dashadvs {
+		dashadv := dashadv.(map[string]interface{})
+		dasha := DashAdvanced{
+			UtcTiming:                  dashadv["utc_timing"].(string),
+			UtcTimingServer:            dashadv["utc_timing_server"].(string),
+			BaseUrl:                    dashadv["base_url"].(string),
+			Position:                   dashadv["position"].(string),
+			SuggestedPresentationDelay: dashadv["suggested_presentation_delay"].(int),
+		}
+		ve.DashAdvanced = &dasha
 	}
 
 	return &ve, nil
@@ -306,6 +387,16 @@ func resourceTargetRead(ctx context.Context, d *schema.ResourceData, m interface
 		return diag.FromErr(err)
 	}
 
+	hlsadv := flattenTargetHlsAdvanced(target.HlsAdvanced)
+	if err := d.Set("hls_advanced", hlsadv); err != nil {
+		return diag.FromErr(err)
+	}
+
+	dashadv := flattenTargetDashAdvanced(target.DashAdvanced)
+	if err := d.Set("dash_advanced", dashadv); err != nil {
+		return diag.FromErr(err)
+	}
+
 	return diags
 }
 
@@ -391,4 +482,27 @@ func flattenTargetEncryption(enc *[]Encryption) []interface{} {
 	}
 
 	return make([]interface{}, 0)
+}
+
+func flattenTargetDashAdvanced(adv *DashAdvanced) []interface{} {
+
+	c := make(map[string]interface{})
+	if adv != nil {
+		c["utc_timing"] = adv.UtcTiming
+		c["utc_timing_server"] = adv.UtcTimingServer
+		c["base_url"] = adv.BaseUrl
+		c["position"] = adv.Position
+		c["suggested_presentation_delay"] = adv.SuggestedPresentationDelay
+	}
+	return []interface{}{c}
+}
+
+func flattenTargetHlsAdvanced(adv *HlsAdvanced) []interface{} {
+
+	c := make(map[string]interface{})
+	if adv != nil {
+		c["program_datetime"] = adv.ProgramDatetime
+		c["version"] = adv.Version
+	}
+	return []interface{}{c}
 }

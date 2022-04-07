@@ -93,15 +93,31 @@ func (c *Client) UpdateInput(poolName string, inputName string, input Input) (*I
 		}
 
 		log.Println(string(rb))
-		req, err := http.NewRequest("PUT", fmt.Sprintf("%s/1.0/pools/%s/inputs/%s/streams/%s", c.HostURL, poolName, inputName, stream.Uuid), strings.NewReader(string(rb)))
-		if err != nil {
-			return nil, err
+
+		if stream.Uuid != "" {
+			req, err := http.NewRequest("PUT", fmt.Sprintf("%s/1.0/pools/%s/inputs/%s/streams/%s", c.HostURL, poolName, inputName, stream.Uuid), strings.NewReader(string(rb)))
+
+			if err != nil {
+				return nil, err
+			}
+
+			_, err = c.doRequest(req)
+			if err != nil {
+				return nil, err
+			}
+		} else {
+			req, err := http.NewRequest("POST", fmt.Sprintf("%s/1.0/pools/%s/inputs/%s/streams/", c.HostURL, poolName, inputName), strings.NewReader(string(rb)))
+
+			if err != nil {
+				return nil, err
+			}
+
+			_, err = c.doRequest(req)
+			if err != nil {
+				return nil, err
+			}
 		}
 
-		_, err = c.doRequest(req)
-		if err != nil {
-			return nil, err
-		}
 	}
 
 	// Second update input

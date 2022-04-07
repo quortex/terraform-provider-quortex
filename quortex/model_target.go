@@ -1,5 +1,20 @@
 package quortex
 
+// DashAdvanced -
+type DashAdvanced struct {
+	UtcTiming                  string `json:"utc_timing,omitempty"`
+	UtcTimingServer            string `json:"utc_timing_server,omitempty"`
+	BaseUrl                    string `json:"base_url,omitempty"`
+	Position                   string `json:"position,omitempty"`
+	SuggestedPresentationDelay int    `json:"suggested_presentation_delay,omitempty"`
+}
+
+// HlsAdvanced -
+type HlsAdvanced struct {
+	ProgramDatetime string `json:"program_datetime,omitempty"`
+	Version         int    `json:"version,omitempty"`
+}
+
 // Encryption -
 type Encryption struct {
 	Uuid       string   `json:"uuid,omitempty"`
@@ -38,4 +53,6 @@ type Target struct {
 	ProcessingLabelRestriction []string           `json:"processing_label_restriction,omitempty"`
 	EncryptionType             string             `json:"encryption_type,omitempty"`
 	EncryptionDynamic          *EncryptionDynamic `json:"encryption_dynamic,omitempty"`
+	DashAdvanced               *DashAdvanced      `json:"dash_advanced,omitempty"`
+	HlsAdvanced                *HlsAdvanced       `json:"hls_advanced,omitempty"`
 }

@@ -26,13 +26,27 @@ description: |-
 ### Optional
 
 - **container** (String)
+- **dash_advanced** (Block List, Max: 1) (see [below for nested schema](#nestedblock--dash_advanced))
 - **encryption_dynamic** (Block List, Max: 1) (see [below for nested schema](#nestedblock--encryption_dynamic))
+- **hls_advanced** (Block List, Max: 1) (see [below for nested schema](#nestedblock--hls_advanced))
 - **id** (String) The ID of this resource.
 - **identifier** (String)
 - **input_label_restriction** (List of String)
 - **processing_label_restriction** (List of String)
 - **published** (Boolean)
 - **scte_35** (Block List, Max: 1) (see [below for nested schema](#nestedblock--scte_35))
+
+<a id="nestedblock--dash_advanced"></a>
+### Nested Schema for `dash_advanced`
+
+Optional:
+
+- **base_url** (String)
+- **position** (String)
+- **suggested_presentation_delay** (Number)
+- **utc_timing** (String)
+- **utc_timing_server** (String)
+
 
 <a id="nestedblock--encryption_dynamic"></a>
 ### Nested Schema for `encryption_dynamic`
@@ -63,6 +77,15 @@ Read-Only:
 
 - **uuid** (String)
 
+
+
+<a id="nestedblock--hls_advanced"></a>
+### Nested Schema for `hls_advanced`
+
+Optional:
+
+- **program_datetime** (String)
+- **version** (Number)
 
 
 <a id="nestedblock--scte_35"></a>
