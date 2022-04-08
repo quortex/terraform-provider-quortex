@@ -45,6 +45,7 @@ Required:
 Optional:
 
 - **ad** (Boolean)
+- **label** (String)
 
 
 <a id="nestedblock--subtitle"></a>
@@ -72,6 +73,7 @@ Required:
 Optional:
 
 - **advanced** (Block List, Max: 1) (see [below for nested schema](#nestedblock--video--advanced))
+- **label** (String)
 
 <a id="nestedblock--video--resolution"></a>
 ### Nested Schema for `video.resolution`

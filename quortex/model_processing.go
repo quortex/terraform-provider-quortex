@@ -21,6 +21,7 @@ type Advanced struct {
 
 // VideoMedia -
 type VideoMedia struct {
+	Label      string      `json:"label,omitempty"`
 	Codec      string      `json:"codec"`
 	Bitrate    int         `json:"bitrate"`
 	Framerate  string      `json:"framerate"`
@@ -30,6 +31,7 @@ type VideoMedia struct {
 
 // AudioMedia -
 type AudioMedia struct {
+	Label            string `json:"label,omitempty"`
 	Codec            string `json:"codec"`
 	Channels         string `json:"channels"`
 	Bitrate          int    `json:"bitrate"`

@@ -39,6 +39,11 @@ func resourceOttProcessing() *schema.Resource {
 				MaxItems: 10,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
+						"label": {
+							Type:     schema.TypeString,
+							Optional: true,
+							Default:  "",
+						},
 						"codec": {
 							Type:     schema.TypeString,
 							Required: true,
@@ -134,6 +139,11 @@ func resourceOttProcessing() *schema.Resource {
 				MaxItems: 10,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
+						"label": {
+							Type:     schema.TypeString,
+							Optional: true,
+							Default:  "",
+						},
 						"codec": {
 							Type:     schema.TypeString,
 							Required: true,
@@ -223,6 +233,7 @@ func marshallModelProcessing(d *schema.ResourceData) (*Processing, error) {
 		vid := video.(map[string]interface{})
 		vi := VideoMedia{
 			Codec:     vid["codec"].(string),
+			Label:     vid["label"].(string),
 			Bitrate:   vid["bitrate"].(int),
 			Framerate: vid["framerate"].(string),
 		}
@@ -270,6 +281,7 @@ func marshallModelProcessing(d *schema.ResourceData) (*Processing, error) {
 	for _, audio := range audios {
 		aud := audio.(map[string]interface{})
 		au := AudioMedia{
+			Label:            aud["label"].(string),
 			Codec:            aud["codec"].(string),
 			Channels:         aud["channels"].(string),
 			Bitrate:          aud["bitrate"].(int),
@@ -413,6 +425,7 @@ func flattenProcessingVideos(videos *[]VideoMedia) []interface{} {
 
 		for i, video := range *videos {
 			oi := make(map[string]interface{})
+			oi["label"] = video.Label
 			oi["codec"] = video.Codec
 			oi["bitrate"] = video.Bitrate
 			oi["framerate"] = video.Framerate
@@ -455,6 +468,7 @@ func flattenProcessingAudios(audios *[]AudioMedia) []interface{} {
 
 		for i, audio := range *audios {
 			oi := make(map[string]interface{})
+			oi["label"] = audio.Label
 			oi["codec"] = audio.Codec
 			oi["channels"] = audio.Channels
 			oi["bitrate"] = audio.Bitrate
