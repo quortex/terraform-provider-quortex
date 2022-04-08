@@ -241,7 +241,9 @@ func marshallModelTarget(d *schema.ResourceData) (*Target, error) {
 		}
 		filters := scte["filter_list"].([]interface{})
 		for _, filter := range filters {
-			sc.FilterList = append(sc.FilterList, filter.(string))
+			if filter != nil {
+				sc.FilterList = append(sc.FilterList, filter.(string))
+			}
 		}
 		ve.Scte35 = &sc
 	}
