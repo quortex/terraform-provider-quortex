@@ -188,6 +188,11 @@ func resourceOttTarget() *schema.Resource {
 							Optional: true,
 							Default:  0,
 						},
+						"start_time_origin_offset": {
+							Type:     schema.TypeInt,
+							Optional: true,
+							Default:  0,
+						},
 					},
 				},
 			},
@@ -299,6 +304,7 @@ func marshallModelTarget(d *schema.ResourceData) (*Target, error) {
 			BaseUrl:                    dashadv["base_url"].(string),
 			Position:                   dashadv["position"].(string),
 			SuggestedPresentationDelay: dashadv["suggested_presentation_delay"].(int),
+			StartTimeOriginOffset:      dashadv["start_time_origin_offset"].(int),
 		}
 		ve.DashAdvanced = &dasha
 	}
@@ -495,6 +501,7 @@ func flattenTargetDashAdvanced(adv *DashAdvanced) []interface{} {
 		c["base_url"] = adv.BaseUrl
 		c["position"] = adv.Position
 		c["suggested_presentation_delay"] = adv.SuggestedPresentationDelay
+		c["start_time_origin_offset"] = adv.StartTimeOriginOffset
 	}
 	return []interface{}{c}
 }
