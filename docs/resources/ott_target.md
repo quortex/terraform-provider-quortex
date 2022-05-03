@@ -43,6 +43,7 @@ Optional:
 
 - **base_url** (String)
 - **position** (String)
+- **start_time_origin_offset** (Number)
 - **suggested_presentation_delay** (Number)
 - **utc_timing** (String)
 - **utc_timing_server** (String)

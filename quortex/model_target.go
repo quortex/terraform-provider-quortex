@@ -7,6 +7,7 @@ type DashAdvanced struct {
 	BaseUrl                    string `json:"base_url,omitempty"`
 	Position                   string `json:"position,omitempty"`
 	SuggestedPresentationDelay int    `json:"suggested_presentation_delay,omitempty"`
+	StartTimeOriginOffset      int    `json:"start_time_origin_offset,omitempty"`
 }
 
 // HlsAdvanced -
