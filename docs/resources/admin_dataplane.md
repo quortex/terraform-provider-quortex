@@ -25,14 +25,19 @@ description: |-
 
 ### Optional
 
+- **cdn_reconciliation** (Boolean)
 - **certificate** (String)
 - **cloud_vendor** (String)
+- **create_hpas** (Boolean)
 - **description** (String)
+- **grafana_endpoint** (String)
 - **id** (String) The ID of this resource.
 - **ingress_class** (String)
-- **livepoint** (String)
+- **live_endpoint** (String)
+- **mesh_endpoint** (String)
 - **organization** (String)
-- **rtmpendpoint** (String)
+- **rtmp_endpoint** (String)
+- **smart_traffic_query** (String)
 - **token** (String)
 
 

@@ -2,6 +2,7 @@ package quortex
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -15,6 +16,11 @@ func Provider() *schema.Provider {
 				Type:        schema.TypeString,
 				Optional:    true,
 				DefaultFunc: schema.EnvDefaultFunc("QUORTEX_HOST", nil),
+			},
+			"organization": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				DefaultFunc: schema.EnvDefaultFunc("QUORTEX_ORGANIZATION", nil),
 			},
 			"oauth": {
 				Type:     schema.TypeList,
@@ -100,10 +106,20 @@ func Provider() *schema.Provider {
 func providerConfigure(ctx context.Context, d *schema.ResourceData) (interface{}, diag.Diagnostics) {
 	var diags diag.Diagnostics
 	var host *string
+	var organization *string
 	hVal, ok := d.GetOk("host")
 	if ok {
 		tempHost := hVal.(string)
 		host = &tempHost
+	}
+
+	hVal2, ok2 := d.GetOk("organization")
+	if ok2 {
+		tempOrga := fmt.Sprintf("org=%s", hVal2.(string))
+		organization = &tempOrga
+	} else {
+		tempOrga := ""
+		organization = &tempOrga
 	}
 
 	oauths := d.Get("oauth").([]interface{})
@@ -116,7 +132,7 @@ func providerConfigure(ctx context.Context, d *schema.ResourceData) (interface{}
 		clientid := oaut["client_id"].(string)
 		clientsecret := oaut["client_secret"].(string)
 		if (authserver != "") && (clientid != "") && (clientsecret != "") {
-			c, err := NewClientOauth(host, &authserver, &clientid, &clientsecret)
+			c, err := NewClientOauth(host, &authserver, &clientid, &clientsecret, organization)
 			if err != nil {
 				diags = append(diags, diag.Diagnostic{
 					Severity: diag.Error,

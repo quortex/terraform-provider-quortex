@@ -52,12 +52,22 @@ func resourceAdminDataplane() *schema.Resource {
 				Optional: true,
 			},
 
-			"livepoint": {
+			"live_endpoint": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
 
-			"rtmpendpoint": {
+			"rtmp_endpoint": {
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+
+			"grafana_endpoint": {
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+
+			"mesh_endpoint": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
@@ -76,6 +86,24 @@ func resourceAdminDataplane() *schema.Resource {
 				Type:     schema.TypeString,
 				Optional: true,
 				Default:  "traefik",
+			},
+
+			"smart_traffic_query": {
+				Type:     schema.TypeString,
+				Optional: true,
+				Default:  "smart_traffic",
+			},
+
+			"create_hpas": {
+				Type:     schema.TypeBool,
+				Optional: true,
+				Default:  true,
+			},
+
+			"cdn_reconciliation": {
+				Type:     schema.TypeBool,
+				Optional: true,
+				Default:  true,
 			},
 		},
 		Importer: &schema.ResourceImporter{
@@ -96,11 +124,16 @@ func resourceDataplaneCreate(ctx context.Context, d *schema.ResourceData, m inte
 		Endpoint:           d.Get("endpoint").(string),
 		Certificate:        d.Get("certificate").(string),
 		Token:              d.Get("token").(string),
-		Livepoint:          d.Get("livepoint").(string),
-		Rtmpendpoint:       d.Get("rtmpendpoint").(string),
+		LiveEndpoint:       d.Get("live_endpoint").(string),
+		RtmpEndpoint:       d.Get("rtmp_endpoint").(string),
+		MeshEndpoint:       d.Get("mesh_endpoint").(string),
+		GrafanaEndpoint:    d.Get("grafana_endpoint").(string),
 		Enable:             d.Get("enable").(bool),
 		ManageDistribution: d.Get("manage_distribution").(bool),
 		IngressClass:       d.Get("ingress_class").(string),
+		SmartTrafficQuery:  d.Get("smart_traffic_query").(string),
+		CreateHpas:         d.Get("create_hpas").(bool),
+		CdnReconciliation:  d.Get("cdn_reconciliation").(bool),
 	}
 
 	o, err := c.CreateDataplane(ve)
@@ -158,11 +191,19 @@ func resourceDataplaneRead(ctx context.Context, d *schema.ResourceData, m interf
 		return diag.FromErr(err)
 	}
 
-	if err := d.Set("livepoint", dataplane.Livepoint); err != nil {
+	if err := d.Set("live_endpoint", dataplane.LiveEndpoint); err != nil {
 		return diag.FromErr(err)
 	}
 
-	if err := d.Set("rtmpendpoint", dataplane.Rtmpendpoint); err != nil {
+	if err := d.Set("rtmp_endpoint", dataplane.RtmpEndpoint); err != nil {
+		return diag.FromErr(err)
+	}
+
+	if err := d.Set("mesh_endpoint", dataplane.MeshEndpoint); err != nil {
+		return diag.FromErr(err)
+	}
+
+	if err := d.Set("grafana_endpoint", dataplane.GrafanaEndpoint); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -175,6 +216,18 @@ func resourceDataplaneRead(ctx context.Context, d *schema.ResourceData, m interf
 	}
 
 	if err := d.Set("ingress_class", dataplane.IngressClass); err != nil {
+		return diag.FromErr(err)
+	}
+
+	if err := d.Set("smart_traffic_query", dataplane.SmartTrafficQuery); err != nil {
+		return diag.FromErr(err)
+	}
+
+	if err := d.Set("create_hpas", dataplane.CreateHpas); err != nil {
+		return diag.FromErr(err)
+	}
+
+	if err := d.Set("cdn_reconciliation", dataplane.CdnReconciliation); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -195,11 +248,16 @@ func resourceDataplaneUpdate(ctx context.Context, d *schema.ResourceData, m inte
 		Endpoint:           d.Get("endpoint").(string),
 		Certificate:        d.Get("certificate").(string),
 		Token:              d.Get("token").(string),
-		Livepoint:          d.Get("livepoint").(string),
-		Rtmpendpoint:       d.Get("rtmpendpoint").(string),
+		LiveEndpoint:       d.Get("live_endpoint").(string),
+		RtmpEndpoint:       d.Get("rtmp_endpoint").(string),
+		MeshEndpoint:       d.Get("mesh_endpoint").(string),
+		GrafanaEndpoint:    d.Get("grafana_endpoint").(string),
 		Enable:             d.Get("enable").(bool),
 		ManageDistribution: d.Get("manage_distribution").(bool),
 		IngressClass:       d.Get("ingress_class").(string),
+		SmartTrafficQuery:  d.Get("smart_traffic_query").(string),
+		CreateHpas:         d.Get("create_hpas").(bool),
+		CdnReconciliation:  d.Get("cdn_reconciliation").(bool),
 	}
 
 	_, err := c.UpdateDataplane(dataplaneId, ve)

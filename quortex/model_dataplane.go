@@ -10,9 +10,14 @@ type Dataplane struct {
 	Endpoint           string `json:"endpoint"`
 	Certificate        string `json:"certificate,omitempty"`
 	Token              string `json:"token,omitempty"`
-	Livepoint          string `json:"livepoint,omitempty"`
-	Rtmpendpoint       string `json:"rtmpendpoint,omitempty"`
+	LiveEndpoint       string `json:"livepoint,omitempty"`
+	RtmpEndpoint       string `json:"rtmpendpoint,omitempty"`
+	MeshEndpoint       string `json:"meshendpoint,omitempty"`
+	GrafanaEndpoint    string `json:"grafanaendpoint,omitempty"`
 	Enable             bool   `json:"enable"`
 	ManageDistribution bool   `json:"manage_distribution"`
 	IngressClass       string `json:"ingress_class,omitempty"`
+	SmartTrafficQuery  string `json:"smart_traffic_query,omitempty"`
+	CreateHpas         bool   `json:"create_hpas"`
+	CdnReconciliation  bool   `json:"cdn_reconciliation"`
 }

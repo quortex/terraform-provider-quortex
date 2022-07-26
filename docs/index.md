@@ -21,6 +21,7 @@ description: |-
 - **basic_auth** (Block List, Max: 1) (see [below for nested schema](#nestedblock--basic_auth))
 - **host** (String)
 - **oauth** (Block List, Max: 1) (see [below for nested schema](#nestedblock--oauth))
+- **organization** (String)
 
 <a id="nestedblock--api_key"></a>
 ### Nested Schema for `api_key`
