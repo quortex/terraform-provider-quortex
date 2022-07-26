@@ -39,7 +39,6 @@ Optional:
 
 - **enabled** (Boolean)
 - **fallback_url** (String)
-- **logo_url** (String)
 - **rtmp** (Block List, Max: 1) (see [below for nested schema](#nestedblock--stream--rtmp))
 - **srt** (Block List, Max: 1) (see [below for nested schema](#nestedblock--stream--srt))
 
