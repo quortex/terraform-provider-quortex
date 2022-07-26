@@ -52,10 +52,6 @@ func resourceOttInput() *schema.Resource {
 							Optional: true,
 							Default:  true,
 						},
-						"logo_url": {
-							Type:     schema.TypeString,
-							Optional: true,
-						},
 						"fallback_url": {
 							Type:     schema.TypeString,
 							Optional: true,
@@ -267,7 +263,6 @@ func marshallModelInput(d *schema.ResourceData) (*Input, error) {
 			Uuid:        st["uuid"].(string),
 			Name:        st["name"].(string),
 			Enabled:     st["enabled"].(bool),
-			LogoUrl:     st["logo_url"].(string),
 			FallbackUrl: st["fallback_url"].(string),
 		}
 
@@ -473,7 +468,6 @@ func flattenInputStreams(streams *[]Stream) []interface{} {
 			oi["uuid"] = stream.Uuid
 			oi["name"] = stream.Name
 			oi["enabled"] = stream.Enabled
-			oi["logo_url"] = stream.LogoUrl
 			oi["fallback_url"] = stream.FallbackUrl
 			if stream.Type == "srt" {
 				oi["srt"] = flattenSrt(stream.Srt)

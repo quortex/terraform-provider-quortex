@@ -51,7 +51,6 @@ type Stream struct {
 	Uuid        string `json:"uuid,omitempty"`
 	Name        string `json:"name"`
 	Enabled     bool   `json:"enabled,omitempty"`
-	LogoUrl     string `json:"logo_url,omitempty"`
 	FallbackUrl string `json:"fallback_url,omitempty"`
 	Type        string `json:"type"`
 	Srt         *Srt   `json:"srt,omitempty"`
