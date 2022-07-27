@@ -38,16 +38,16 @@ func resourceAdminDataplane() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"endpoint": {
+			"kube_endpoint": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
 
-			"certificate": {
+			"kube_certificate": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"token": {
+			"kube_token": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
@@ -121,9 +121,9 @@ func resourceDataplaneCreate(ctx context.Context, d *schema.ResourceData, m inte
 		Organization:       d.Get("organization").(string),
 		Provider:           d.Get("cloud_vendor").(string),
 		Region:             d.Get("region").(string),
-		Endpoint:           d.Get("endpoint").(string),
-		Certificate:        d.Get("certificate").(string),
-		Token:              d.Get("token").(string),
+		KubeEndpoint:       d.Get("kube_endpoint").(string),
+		KubeCertificate:    d.Get("kube_certificate").(string),
+		KubeToken:          d.Get("kube_token").(string),
 		LiveEndpoint:       d.Get("live_endpoint").(string),
 		RtmpEndpoint:       d.Get("rtmp_endpoint").(string),
 		MeshEndpoint:       d.Get("mesh_endpoint").(string),
@@ -179,15 +179,15 @@ func resourceDataplaneRead(ctx context.Context, d *schema.ResourceData, m interf
 		return diag.FromErr(err)
 	}
 
-	if err := d.Set("endpoint", dataplane.Endpoint); err != nil {
+	if err := d.Set("kube_endpoint", dataplane.KubeEndpoint); err != nil {
 		return diag.FromErr(err)
 	}
 
-	if err := d.Set("certificate", dataplane.Certificate); err != nil {
+	if err := d.Set("kube_certificate", dataplane.KubeCertificate); err != nil {
 		return diag.FromErr(err)
 	}
 
-	if err := d.Set("token", dataplane.Token); err != nil {
+	if err := d.Set("kube_token", dataplane.KubeToken); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -245,9 +245,9 @@ func resourceDataplaneUpdate(ctx context.Context, d *schema.ResourceData, m inte
 		Organization:       d.Get("organization").(string),
 		Provider:           d.Get("cloud_vendor").(string),
 		Region:             d.Get("region").(string),
-		Endpoint:           d.Get("endpoint").(string),
-		Certificate:        d.Get("certificate").(string),
-		Token:              d.Get("token").(string),
+		KubeEndpoint:       d.Get("kube_endpoint").(string),
+		KubeCertificate:    d.Get("kube_certificate").(string),
+		KubeToken:          d.Get("kube_token").(string),
 		LiveEndpoint:       d.Get("live_endpoint").(string),
 		RtmpEndpoint:       d.Get("rtmp_endpoint").(string),
 		MeshEndpoint:       d.Get("mesh_endpoint").(string),

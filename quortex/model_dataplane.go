@@ -7,13 +7,13 @@ type Dataplane struct {
 	Organization       string `json:"organization,omitempty"`
 	Provider           string `json:"provider,omitempty"`
 	Region             string `json:"region"`
-	Endpoint           string `json:"endpoint"`
-	Certificate        string `json:"certificate,omitempty"`
-	Token              string `json:"token,omitempty"`
-	LiveEndpoint       string `json:"livepoint,omitempty"`
-	RtmpEndpoint       string `json:"rtmpendpoint,omitempty"`
-	MeshEndpoint       string `json:"meshendpoint,omitempty"`
-	GrafanaEndpoint    string `json:"grafanaendpoint,omitempty"`
+	KubeEndpoint       string `json:"kube_endpoint"`
+	KubeCertificate    string `json:"kube_certificate,omitempty"`
+	KubeToken          string `json:"kube_token,omitempty"`
+	LiveEndpoint       string `json:"live_endpoint,omitempty"`
+	RtmpEndpoint       string `json:"rtmp_endpoint,omitempty"`
+	MeshEndpoint       string `json:"mesh_endpoint,omitempty"`
+	GrafanaEndpoint    string `json:"grafana_endpoint,omitempty"`
 	Enable             bool   `json:"enable"`
 	ManageDistribution bool   `json:"manage_distribution"`
 	IngressClass       string `json:"ingress_class,omitempty"`
