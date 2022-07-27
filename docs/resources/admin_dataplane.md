@@ -18,21 +18,26 @@ description: |-
 ### Required
 
 - **enable** (Boolean)
-- **endpoint** (String)
+- **kube_endpoint** (String)
 - **manage_distribution** (Boolean)
 - **name** (String)
 - **region** (String)
 
 ### Optional
 
-- **certificate** (String)
+- **cdn_reconciliation** (Boolean)
 - **cloud_vendor** (String)
+- **create_hpas** (Boolean)
 - **description** (String)
+- **grafana_endpoint** (String)
 - **id** (String) The ID of this resource.
 - **ingress_class** (String)
-- **livepoint** (String)
+- **kube_certificate** (String)
+- **kube_token** (String)
+- **live_endpoint** (String)
+- **mesh_endpoint** (String)
 - **organization** (String)
-- **rtmpendpoint** (String)
-- **token** (String)
+- **rtmp_endpoint** (String)
+- **smart_traffic_query** (String)
 
 

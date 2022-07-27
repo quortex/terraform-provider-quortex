@@ -13,9 +13,10 @@ import (
 
 // Client -
 type Client struct {
-	HostURL    string
-	HTTPClient *http.Client
-	Token      string
+	HostURL      string
+	Organization string
+	HTTPClient   *http.Client
+	Token        string
 }
 
 // AuthStruct -
@@ -102,10 +103,11 @@ func NewClientApiKey(host *string, apikey *string, authserver *string) (*Client,
 }
 
 // NewClientOauth -
-func NewClientOauth(host *string, authserver *string, clientid *string, clientsecret *string) (*Client, error) {
+func NewClientOauth(host *string, authserver *string, clientid *string, clientsecret *string, organization *string) (*Client, error) {
 	c := Client{
-		HTTPClient: &http.Client{Timeout: 10 * time.Second},
-		HostURL:    *host,
+		HTTPClient:   &http.Client{Timeout: 10 * time.Second},
+		HostURL:      *host,
+		Organization: *organization,
 	}
 
 	// form request body

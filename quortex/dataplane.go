@@ -10,7 +10,7 @@ import (
 
 // GetDataplane - Get a dataplane
 func (c *Client) GetDataplane(dataplaneName string) (*Dataplane, error) {
-	req, err := http.NewRequest("GET", fmt.Sprintf("%s/1.0/private/dataplanes/%s", c.HostURL, dataplaneName), nil)
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s/1.0/private/dataplanes/%s?%s", c.HostURL, dataplaneName, c.Organization), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -31,7 +31,7 @@ func (c *Client) GetDataplane(dataplaneName string) (*Dataplane, error) {
 
 // GetDataplanes - Returns list of dataplanes
 func (c *Client) GetDataplanes() ([]Dataplane, error) {
-	req, err := http.NewRequest("GET", fmt.Sprintf("%s/1.0/private/dataplanes", c.HostURL), nil)
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s/1.0/private/dataplanes?%s", c.HostURL, c.Organization), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -58,7 +58,7 @@ func (c *Client) CreateDataplane(dataplane Dataplane) (*Dataplane, error) {
 	}
 	log.Printf("[INFO] %s !", rb)
 
-	req, err := http.NewRequest("POST", fmt.Sprintf("%s/1.0/private/dataplanes", c.HostURL), strings.NewReader(string(rb)))
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s/1.0/private/dataplanes?%s", c.HostURL, c.Organization), strings.NewReader(string(rb)))
 	if err != nil {
 		return nil, err
 	}
@@ -87,7 +87,7 @@ func (c *Client) UpdateDataplane(dataplaneName string, dataplane Dataplane) (*Da
 		return nil, err
 	}
 
-	req, err := http.NewRequest("PUT", fmt.Sprintf("%s/1.0/private/dataplanes/%s", c.HostURL, dataplaneName), strings.NewReader(string(rb)))
+	req, err := http.NewRequest("PUT", fmt.Sprintf("%s/1.0/private/dataplanes/%s?%s", c.HostURL, dataplaneName, c.Organization), strings.NewReader(string(rb)))
 	if err != nil {
 		return nil, err
 	}
@@ -108,7 +108,7 @@ func (c *Client) UpdateDataplane(dataplaneName string, dataplane Dataplane) (*Da
 
 // DeleteDataplane - Deletes an dataplane
 func (c *Client) DeleteDataplane(dataplaneName string) error {
-	req, err := http.NewRequest("DELETE", fmt.Sprintf("%s/1.0/private/dataplanes/%s?dataplane_uuid=%s", c.HostURL, dataplaneName, dataplaneName), nil)
+	req, err := http.NewRequest("DELETE", fmt.Sprintf("%s/1.0/private/dataplanes/%s?dataplane_uuid=%s&%s", c.HostURL, dataplaneName, dataplaneName, c.Organization), nil)
 	if err != nil {
 		return err
 	}
