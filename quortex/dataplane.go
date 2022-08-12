@@ -108,7 +108,7 @@ func (c *Client) UpdateDataplane(dataplaneName string, dataplane Dataplane) (*Da
 
 // DeleteDataplane - Deletes an dataplane
 func (c *Client) DeleteDataplane(dataplaneName string) error {
-	req, err := http.NewRequest("DELETE", fmt.Sprintf("%s/1.0/private/dataplanes/%s?dataplane_uuid=%s&%s", c.HostURL, dataplaneName, dataplaneName, c.Organization), nil)
+	req, err := http.NewRequest("DELETE", fmt.Sprintf("%s/1.0/private/dataplanes/%s?dataplane_uuid=%s&force=yes&%s", c.HostURL, dataplaneName, dataplaneName, c.Organization), nil)
 	if err != nil {
 		return err
 	}
