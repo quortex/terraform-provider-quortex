@@ -92,6 +92,7 @@ func Provider() *schema.Provider {
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			"quortex_admin_dataplane":  resourceAdminDataplane(),
+			"quortex_admin_bucket":     resourceAdminBucket(),
 			"quortex_ott_pool":         resourceOttPool(),
 			"quortex_ott_input":        resourceOttInput(),
 			"quortex_ott_processing":   resourceOttProcessing(),

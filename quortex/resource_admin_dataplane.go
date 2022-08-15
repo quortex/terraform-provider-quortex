@@ -15,8 +15,9 @@ func resourceAdminDataplane() *schema.Resource {
 		DeleteContext: resourceDataplaneDelete,
 		Schema: map[string]*schema.Schema{
 			"name": {
-				Type:     schema.TypeString,
+				ForceNew: true,
 				Required: true,
+				Type:     schema.TypeString,
 			},
 			"description": {
 				Type:     schema.TypeString,
@@ -24,8 +25,9 @@ func resourceAdminDataplane() *schema.Resource {
 			},
 
 			"organization": {
-				Type:     schema.TypeString,
+				ForceNew: true,
 				Optional: true,
+				Type:     schema.TypeString,
 			},
 
 			"cloud_vendor": {
