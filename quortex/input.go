@@ -85,16 +85,38 @@ func (c *Client) CreateInput(poolName string, input Input) (*Input, error) {
 // UpdateInput - Updates a input
 func (c *Client) UpdateInput(poolName string, inputName string, input Input) (*Input, error) {
 
-	// First update streams
+	// First get current streams
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s/1.0/pools/%s/inputs/%s", c.HostURL, poolName, inputName), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	body, err := c.doRequest(req)
+	if err != nil {
+		return nil, err
+	}
+
+	currentInput := Input{}
+	err = json.Unmarshal(body, &currentInput)
+	if err != nil {
+		return nil, err
+
+	}
+
+	// Second create or update streams
 	for _, stream := range input.Streams {
+		founded := false
+		for _, curStream := range currentInput.Streams {
+			if stream.Uuid == curStream.Uuid {
+				founded = true
+			}
+		}
+
 		rb, err := json.Marshal(stream)
 		if err != nil {
 			return nil, err
 		}
-
-		log.Println(string(rb))
-
-		if stream.Uuid != "" {
+		if founded == true {
 			req, err := http.NewRequest("PUT", fmt.Sprintf("%s/1.0/pools/%s/inputs/%s/streams/%s", c.HostURL, poolName, inputName, stream.Uuid), strings.NewReader(string(rb)))
 
 			if err != nil {
@@ -117,22 +139,43 @@ func (c *Client) UpdateInput(poolName string, inputName string, input Input) (*I
 				return nil, err
 			}
 		}
-
 	}
 
-	// Second update input
+	// Third delete streams
+	for _, curStream := range currentInput.Streams {
+		founded := false
+		for _, stream := range input.Streams {
+			if stream.Uuid == curStream.Uuid {
+				founded = true
+			}
+		}
+
+		if founded == false {
+			req, err := http.NewRequest("DELETE", fmt.Sprintf("%s/1.0/pools/%s/inputs/%s/streams/%s", c.HostURL, poolName, inputName, curStream.Uuid), nil)
+
+			if err != nil {
+				return nil, err
+			}
+
+			_, err = c.doRequest(req)
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
+
+	// Finally update input
 	rb, err := json.Marshal(input)
 	if err != nil {
 		return nil, err
 	}
 
-	log.Println(string(rb))
-	req, err := http.NewRequest("PUT", fmt.Sprintf("%s/1.0/pools/%s/inputs/%s", c.HostURL, poolName, inputName), strings.NewReader(string(rb)))
+	req, err = http.NewRequest("PUT", fmt.Sprintf("%s/1.0/pools/%s/inputs/%s", c.HostURL, poolName, inputName), strings.NewReader(string(rb)))
 	if err != nil {
 		return nil, err
 	}
 
-	body, err := c.doRequest(req)
+	body, err = c.doRequest(req)
 	if err != nil {
 		return nil, err
 	}
