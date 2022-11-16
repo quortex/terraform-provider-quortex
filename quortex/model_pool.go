@@ -1,5 +1,10 @@
 package quortex
 
+// Catchup -
+type Catchup struct {
+	Enabled bool `json:"enabled,omitempty"`
+}
+
 // TimeShifting -
 type TimeShifting struct {
 	Enabled           bool `json:"enabled,omitempty"`
@@ -15,4 +20,5 @@ type Pool struct {
 	StreamingCountries []string      `json:"streaming_countries"`
 	Label              string        `json:"label,omitempty"`
 	TimeShifting       *TimeShifting `json:"time_shifting,omitempty"`
+	Catchup            *Catchup      `json:"catchup,omitempty"`
 }

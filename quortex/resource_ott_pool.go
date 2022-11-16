@@ -57,6 +57,21 @@ func resourceOttPool() *schema.Resource {
 					},
 				},
 			},
+			"catchup": {
+				Type:     schema.TypeList,
+				Optional: true,
+				MinItems: 0,
+				MaxItems: 1,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"enabled": {
+							Type:     schema.TypeBool,
+							Optional: true,
+							Default:  false,
+						},
+					},
+				},
+			},
 		},
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
@@ -67,6 +82,7 @@ func resourceOttPool() *schema.Resource {
 func marshallModelPool(d *schema.ResourceData) (*Pool, error) {
 
 	time_shiftings := d.Get("time_shifting").([]interface{})
+	catchups := d.Get("catchup").([]interface{})
 	ve := Pool{
 		Name:        d.Get("name").(string),
 		Published:   d.Get("published").(bool),
@@ -85,6 +101,14 @@ func marshallModelPool(d *schema.ResourceData) (*Pool, error) {
 			StartoverDuration: time_shift["startover_duration"].(int),
 		}
 		ve.TimeShifting = &ts
+	}
+
+	for _, catchup := range catchups {
+		catch := catchup.(map[string]interface{})
+		ca := Catchup{
+			Enabled: catch["enabled"].(bool),
+		}
+		ve.Catchup = &ca
 	}
 
 	return &ve, nil
@@ -149,6 +173,11 @@ func resourcePoolRead(ctx context.Context, d *schema.ResourceData, m interface{}
 		return diag.FromErr(err)
 	}
 
+	catchup := flattenPoolCatchup(pool.Catchup)
+	if err := d.Set("catchup", catchup); err != nil {
+		return diag.FromErr(err)
+	}
+
 	return diags
 }
 
@@ -198,6 +227,16 @@ func flattenPoolTimeShifting(timeshifting *TimeShifting) []interface{} {
 	if timeshifting != nil {
 		c["enabled"] = timeshifting.Enabled
 		c["startover_duration"] = timeshifting.StartoverDuration
+
+	}
+	return []interface{}{c}
+}
+
+func flattenPoolCatchup(catchup *Catchup) []interface{} {
+
+	c := make(map[string]interface{})
+	if catchup != nil {
+		c["enabled"] = catchup.Enabled
 
 	}
 	return []interface{}{c}
