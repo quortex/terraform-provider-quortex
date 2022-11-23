@@ -69,6 +69,42 @@ func resourceOttPool() *schema.Resource {
 							Optional: true,
 							Default:  false,
 						},
+						"bucket": {
+							Type:     schema.TypeList,
+							Optional: true,
+							MinItems: 0,
+							MaxItems: 1,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"name": {
+										Type:     schema.TypeString,
+										Required: true,
+									},
+									"region": {
+										Type:     schema.TypeString,
+										Required: true,
+									},
+									"s3": {
+										Type:     schema.TypeList,
+										Optional: true,
+										MinItems: 0,
+										MaxItems: 1,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+												"access_key": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+												"secret_key": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
 					},
 				},
 			},
@@ -107,6 +143,29 @@ func marshallModelPool(d *schema.ResourceData) (*Pool, error) {
 		catch := catchup.(map[string]interface{})
 		ca := Catchup{
 			Enabled: catch["enabled"].(bool),
+		}
+
+		buckets := catch["bucket"].([]interface{})
+		for _, bucket := range buckets {
+			buck := bucket.(map[string]interface{})
+			buc := Bucket2{
+				Name:   buck["name"].(string),
+				Region: buck["region"].(string),
+			}
+
+			if bucs3, ok := buck["s3"]; ok {
+				s3s := bucs3.([]interface{})
+				if len(s3s) > 0 {
+					buc.Type = "s3"
+					s3 := s3s[0].(map[string]interface{})
+					so := S3{
+						AccessKey: s3["access_key"].(string),
+						SecretKey: s3["secret_key"].(string),
+					}
+					buc.S3 = &so
+				}
+			}
+			ca.Bucket2 = &buc
 		}
 		ve.Catchup = &ca
 	}
@@ -237,7 +296,34 @@ func flattenPoolCatchup(catchup *Catchup) []interface{} {
 	c := make(map[string]interface{})
 	if catchup != nil {
 		c["enabled"] = catchup.Enabled
+		if catchup.Bucket2 != nil {
+			c["bucket"] = flattenPoolCatchupBucket(catchup.Bucket2)
+		}
 
+	}
+	return []interface{}{c}
+}
+
+func flattenPoolCatchupBucket(bucket *Bucket2) []interface{} {
+
+	c := make(map[string]interface{})
+	if bucket != nil {
+		c["name"] = bucket.Name
+		c["region"] = bucket.Region
+		if bucket.S3 != nil {
+			c["s3"] = flattenPoolCatchupBucketS3(bucket.S3)
+		}
+
+	}
+	return []interface{}{c}
+}
+
+func flattenPoolCatchupBucketS3(s3 *S3) []interface{} {
+
+	c := make(map[string]interface{})
+	if s3 != nil {
+		c["access_key"] = s3.AccessKey
+		c["secret_key"] = s3.SecretKey
 	}
 	return []interface{}{c}
 }

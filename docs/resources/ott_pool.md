@@ -34,7 +34,30 @@ description: |-
 
 Optional:
 
+- **bucket** (Block List, Max: 1) (see [below for nested schema](#nestedblock--catchup--bucket))
 - **enabled** (Boolean)
+
+<a id="nestedblock--catchup--bucket"></a>
+### Nested Schema for `catchup.bucket`
+
+Required:
+
+- **name** (String)
+- **region** (String)
+
+Optional:
+
+- **s3** (Block List, Max: 1) (see [below for nested schema](#nestedblock--catchup--bucket--s3))
+
+<a id="nestedblock--catchup--bucket--s3"></a>
+### Nested Schema for `catchup.bucket.s3`
+
+Required:
+
+- **access_key** (String)
+- **secret_key** (String)
+
+
 
 
 <a id="nestedblock--time_shifting"></a>

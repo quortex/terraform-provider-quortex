@@ -1,8 +1,17 @@
 package quortex
 
+// Bucket -
+type Bucket2 struct {
+	Name   string `json:"name"`
+	Region string `json:"region"`
+	Type   string `json:"type"`
+	S3     *S3    `json:"s3,omitempty"`
+}
+
 // Catchup -
 type Catchup struct {
-	Enabled bool `json:"enabled,omitempty"`
+	Enabled bool     `json:"enabled,omitempty"`
+	Bucket2 *Bucket2 `json:"bucket,omitempty"`
 }
 
 // TimeShifting -
