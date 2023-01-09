@@ -5,7 +5,6 @@ type Dataplane struct {
 	Name               string `json:"name"`
 	Description        string `json:"description,omitempty"`
 	Organization       string `json:"organization,omitempty"`
-	Provider           string `json:"provider,omitempty"`
 	Region             string `json:"region"`
 	KubeEndpoint       string `json:"kube_endpoint"`
 	KubeCertificate    string `json:"kube_certificate,omitempty"`

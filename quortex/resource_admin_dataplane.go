@@ -19,6 +19,7 @@ func resourceAdminDataplane() *schema.Resource {
 				Required: true,
 				Type:     schema.TypeString,
 			},
+
 			"description": {
 				Type:     schema.TypeString,
 				Optional: true,
@@ -30,16 +31,11 @@ func resourceAdminDataplane() *schema.Resource {
 				Type:     schema.TypeString,
 			},
 
-			"cloud_vendor": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Default:  "aws",
-			},
-
 			"region": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
+
 			"kube_endpoint": {
 				Type:     schema.TypeString,
 				Required: true,
@@ -49,6 +45,7 @@ func resourceAdminDataplane() *schema.Resource {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
+
 			"kube_token": {
 				Type:     schema.TypeString,
 				Optional: true,
@@ -121,7 +118,6 @@ func resourceDataplaneCreate(ctx context.Context, d *schema.ResourceData, m inte
 		Name:               d.Get("name").(string),
 		Description:        d.Get("description").(string),
 		Organization:       d.Get("organization").(string),
-		Provider:           d.Get("cloud_vendor").(string),
 		Region:             d.Get("region").(string),
 		KubeEndpoint:       d.Get("kube_endpoint").(string),
 		KubeCertificate:    d.Get("kube_certificate").(string),
@@ -170,10 +166,6 @@ func resourceDataplaneRead(ctx context.Context, d *schema.ResourceData, m interf
 	}
 
 	if err := d.Set("organization", dataplane.Organization); err != nil {
-		return diag.FromErr(err)
-	}
-
-	if err := d.Set("cloud_vendor", dataplane.Provider); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -245,7 +237,6 @@ func resourceDataplaneUpdate(ctx context.Context, d *schema.ResourceData, m inte
 		Name:               d.Get("name").(string),
 		Description:        d.Get("description").(string),
 		Organization:       d.Get("organization").(string),
-		Provider:           d.Get("cloud_vendor").(string),
 		Region:             d.Get("region").(string),
 		KubeEndpoint:       d.Get("kube_endpoint").(string),
 		KubeCertificate:    d.Get("kube_certificate").(string),
