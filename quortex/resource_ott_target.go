@@ -81,7 +81,6 @@ func resourceOttTarget() *schema.Resource {
 			"encryption_dynamic": {
 				Type:     schema.TypeList,
 				Optional: true,
-				Computed: true,
 				MinItems: 0,
 				MaxItems: 1,
 				Elem: &schema.Resource{
@@ -99,7 +98,6 @@ func resourceOttTarget() *schema.Resource {
 						"encryption": {
 							Type:     schema.TypeList,
 							Optional: true,
-							Computed: true,
 							MinItems: 0,
 							MaxItems: 5,
 							Elem: &schema.Resource{
