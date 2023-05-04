@@ -26,7 +26,6 @@ description: |-
 ### Optional
 
 - **cdn_reconciliation** (Boolean)
-- **cloud_vendor** (String)
 - **create_hpas** (Boolean)
 - **description** (String)
 - **grafana_endpoint** (String)
