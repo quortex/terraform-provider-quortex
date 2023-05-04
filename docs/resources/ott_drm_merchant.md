@@ -23,6 +23,7 @@ description: |-
 
 - **castlabs** (Block List, Max: 1) (see [below for nested schema](#nestedblock--castlabs))
 - **id** (String) The ID of this resource.
+- **irdeto** (Block List, Max: 1) (see [below for nested schema](#nestedblock--irdeto))
 
 <a id="nestedblock--castlabs"></a>
 ### Nested Schema for `castlabs`
@@ -35,5 +36,16 @@ Required:
 - **drm_server** (String)
 - **key_seed_id** (String)
 - **merchant_name** (String)
+
+
+<a id="nestedblock--irdeto"></a>
+### Nested Schema for `irdeto`
+
+Required:
+
+- **drm_server** (String)
+- **merchant_name** (String)
+- **password** (String)
+- **username** (String)
 
 

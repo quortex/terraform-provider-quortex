@@ -52,6 +52,32 @@ func resourceOttDrmMerchant() *schema.Resource {
 					},
 				},
 			},
+			"irdeto": {
+				Type:     schema.TypeList,
+				Optional: true,
+				MinItems: 0,
+				MaxItems: 1,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"merchant_name": {
+							Type:     schema.TypeString,
+							Required: true,
+						},
+						"drm_server": {
+							Type:     schema.TypeString,
+							Required: true,
+						},
+						"username": {
+							Type:     schema.TypeString,
+							Required: true,
+						},
+						"password": {
+							Type:     schema.TypeString,
+							Required: true,
+						},
+					},
+				},
+			},
 		},
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
@@ -62,6 +88,7 @@ func resourceOttDrmMerchant() *schema.Resource {
 func marshallModelDrmMerchant(d *schema.ResourceData) (*DrmMerchant, error) {
 
 	castlabs := d.Get("castlabs").([]interface{})
+	irdetos := d.Get("irdeto").([]interface{})
 	ve := DrmMerchant{
 		Name: d.Get("name").(string),
 	}
@@ -78,6 +105,18 @@ func marshallModelDrmMerchant(d *schema.ResourceData) (*DrmMerchant, error) {
 		}
 		ve.Castlabs = &cas
 		ve.Type = "castlabs"
+	}
+
+	for _, irdeto := range irdetos {
+		irdet := irdeto.(map[string]interface{})
+		irde := Irdeto{
+			MerchantName: irdet["merchant_name"].(string),
+			DrmServer:    irdet["drm_server"].(string),
+			Username:     irdet["username"].(string),
+			Password:     irdet["password"].(string),
+		}
+		ve.Irdeto = &irde
+		ve.Type = "irdeto"
 	}
 
 	return &ve, nil
@@ -123,6 +162,11 @@ func resourceDrmMerchantRead(ctx context.Context, d *schema.ResourceData, m inte
 
 	castlabs := flattenDrmMerchantCastlabs(drmmerchant.Castlabs)
 	if err := d.Set("castlabs", castlabs); err != nil {
+		return diag.FromErr(err)
+	}
+
+	irdeto := flattenDrmMerchantIrdeto(drmmerchant.Irdeto)
+	if err := d.Set("irdeto", irdeto); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -179,6 +223,18 @@ func flattenDrmMerchantCastlabs(castlabs *Castlabs) []interface{} {
 		c["drm_server"] = castlabs.DrmServer
 		c["key_seed_id"] = castlabs.KeySeedId
 		c["auth_creds_id"] = castlabs.AuthCredsId
+	}
+	return []interface{}{c}
+}
+
+func flattenDrmMerchantIrdeto(irdeto *Irdeto) []interface{} {
+
+	c := make(map[string]interface{})
+	if irdeto != nil {
+		c["merchant_name"] = irdeto.MerchantName
+		c["drm_server"] = irdeto.DrmServer
+		c["username"] = irdeto.Username
+		c["password"] = irdeto.Password
 	}
 	return []interface{}{c}
 }
