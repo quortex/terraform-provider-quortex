@@ -53,6 +53,7 @@ Optional:
 
 Required:
 
+- **output** (String)
 - **track** (String)
 
 Optional:

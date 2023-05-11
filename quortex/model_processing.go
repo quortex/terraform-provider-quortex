@@ -44,6 +44,7 @@ type AudioMedia struct {
 // SubtitleMedia -
 type SubtitleMedia struct {
 	Track                string `json:"track"`
+	Output               string `json:"output"`
 	DeafAndHardOfHearing bool   `json:"deaf_and_hard_of_hearing"`
 }
 
