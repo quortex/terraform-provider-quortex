@@ -187,6 +187,10 @@ func resourceOttProcessing() *schema.Resource {
 							Type:     schema.TypeString,
 							Required: true,
 						},
+						"output": {
+							Type:     schema.TypeString,
+							Required: true,
+						},
 						"hoh": {
 							Type:     schema.TypeBool,
 							Optional: true,
@@ -297,6 +301,7 @@ func marshallModelProcessing(d *schema.ResourceData) (*Processing, error) {
 		sub := subtitle.(map[string]interface{})
 		su := SubtitleMedia{
 			Track:                sub["track"].(string),
+			Output:               sub["output"].(string),
 			DeafAndHardOfHearing: sub["hoh"].(bool),
 		}
 		ve.SubtitleMedias = append(ve.SubtitleMedias, su)
@@ -491,6 +496,7 @@ func flattenProcessingSubtitles(subtitles *[]SubtitleMedia) []interface{} {
 		for i, subtitle := range *subtitles {
 			oi := make(map[string]interface{})
 			oi["track"] = subtitle.Track
+			oi["output"] = subtitle.Output
 			oi["hoh"] = subtitle.DeafAndHardOfHearing
 			ois[i] = oi
 		}
