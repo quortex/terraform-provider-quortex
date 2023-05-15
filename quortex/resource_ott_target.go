@@ -81,6 +81,7 @@ func resourceOttTarget() *schema.Resource {
 			"encryption_dynamic": {
 				Type:     schema.TypeList,
 				Optional: true,
+				Computed: true,
 				MinItems: 0,
 				MaxItems: 1,
 				Elem: &schema.Resource{
@@ -253,33 +254,35 @@ func marshallModelTarget(d *schema.ResourceData) (*Target, error) {
 
 	encdyns := d.Get("encryption_dynamic").([]interface{})
 	for _, encdyn := range encdyns {
-		encdy := encdyn.(map[string]interface{})
-		ed := EncryptionDynamic{
-			ContentId:       encdy["content_id"].(string),
-			DrmMerchantUuid: encdy["drm_merchant_uuid"].(string),
-		}
-
-		// Manage encryption
-		encrs := encdy["encryption"].([]interface{})
-		for _, encr := range encrs {
-			enc := encr.(map[string]interface{})
-			en := Encryption{
-				Uuid:       enc["uuid"].(string),
-				Iv:         enc["iv"].(string),
-				IvMode:     enc["iv_mode"].(string),
-				StreamType: enc["stream_type"].(string),
+		if encdyn != nil {
+			encdy := encdyn.(map[string]interface{})
+			ed := EncryptionDynamic{
+				ContentId:       encdy["content_id"].(string),
+				DrmMerchantUuid: encdy["drm_merchant_uuid"].(string),
 			}
 
-			labels := enc["labels"].([]interface{})
-			for _, label := range labels {
-				en.Labels = append(en.Labels, label.(string))
-			}
+			// Manage encryption
+			encrs := encdy["encryption"].([]interface{})
+			for _, encr := range encrs {
+				enc := encr.(map[string]interface{})
+				en := Encryption{
+					Uuid:       enc["uuid"].(string),
+					Iv:         enc["iv"].(string),
+					IvMode:     enc["iv_mode"].(string),
+					StreamType: enc["stream_type"].(string),
+				}
 
-			ed.Encryption = append(ed.Encryption, en)
-		}
-		if ed.ContentId != "" {
-			ve.EncryptionDynamic = &ed
-			ve.EncryptionType = "dynamic"
+				labels := enc["labels"].([]interface{})
+				for _, label := range labels {
+					en.Labels = append(en.Labels, label.(string))
+				}
+
+				ed.Encryption = append(ed.Encryption, en)
+			}
+			if ed.ContentId != "" {
+				ve.EncryptionDynamic = &ed
+				ve.EncryptionType = "dynamic"
+			}
 		}
 	}
 
