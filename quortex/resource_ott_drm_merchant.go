@@ -21,6 +21,7 @@ func resourceOttDrmMerchant() *schema.Resource {
 			"castlabs": {
 				Type:     schema.TypeList,
 				Optional: true,
+				Computed: true,
 				MinItems: 0,
 				MaxItems: 1,
 				Elem: &schema.Resource{
@@ -55,6 +56,7 @@ func resourceOttDrmMerchant() *schema.Resource {
 			"irdeto": {
 				Type:     schema.TypeList,
 				Optional: true,
+				Computed: true,
 				MinItems: 0,
 				MaxItems: 1,
 				Elem: &schema.Resource{
@@ -94,29 +96,33 @@ func marshallModelDrmMerchant(d *schema.ResourceData) (*DrmMerchant, error) {
 	}
 
 	for _, castlab := range castlabs {
-		cast := castlab.(map[string]interface{})
-		cas := Castlabs{
-			MerchantName: cast["merchant_name"].(string),
-			AesIv:        cast["aes_iv"].(string),
-			AesKey:       cast["aes_key"].(string),
-			DrmServer:    cast["drm_server"].(string),
-			KeySeedId:    cast["key_seed_id"].(string),
-			AuthCredsId:  cast["auth_creds_id"].(string),
+		if castlab != nil {
+			cast := castlab.(map[string]interface{})
+			cas := Castlabs{
+				MerchantName: cast["merchant_name"].(string),
+				AesIv:        cast["aes_iv"].(string),
+				AesKey:       cast["aes_key"].(string),
+				DrmServer:    cast["drm_server"].(string),
+				KeySeedId:    cast["key_seed_id"].(string),
+				AuthCredsId:  cast["auth_creds_id"].(string),
+			}
+			ve.Castlabs = &cas
+			ve.Type = "castlabs"
 		}
-		ve.Castlabs = &cas
-		ve.Type = "castlabs"
 	}
 
 	for _, irdeto := range irdetos {
-		irdet := irdeto.(map[string]interface{})
-		irde := Irdeto{
-			MerchantName: irdet["merchant_name"].(string),
-			DrmServer:    irdet["drm_server"].(string),
-			Username:     irdet["username"].(string),
-			Password:     irdet["password"].(string),
+		if irdeto != nil {
+			irdet := irdeto.(map[string]interface{})
+			irde := Irdeto{
+				MerchantName: irdet["merchant_name"].(string),
+				DrmServer:    irdet["drm_server"].(string),
+				Username:     irdet["username"].(string),
+				Password:     irdet["password"].(string),
+			}
+			ve.Irdeto = &irde
+			ve.Type = "irdeto"
 		}
-		ve.Irdeto = &irde
-		ve.Type = "irdeto"
 	}
 
 	return &ve, nil
