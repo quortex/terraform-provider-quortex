@@ -41,6 +41,7 @@ func resourceOttPool() *schema.Resource {
 			"time_shifting": {
 				Type:     schema.TypeList,
 				Optional: true,
+				Computed: true,
 				MinItems: 0,
 				MaxItems: 1,
 				Elem: &schema.Resource{
@@ -60,6 +61,7 @@ func resourceOttPool() *schema.Resource {
 			"catchup": {
 				Type:     schema.TypeList,
 				Optional: true,
+				Computed: true,
 				MinItems: 0,
 				MaxItems: 1,
 				Elem: &schema.Resource{
@@ -108,6 +110,43 @@ func resourceOttPool() *schema.Resource {
 					},
 				},
 			},
+			"origin": {
+				Type:     schema.TypeList,
+				Optional: true,
+				Computed: true,
+				MinItems: 0,
+				MaxItems: 1,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"enabled": {
+							Type:     schema.TypeBool,
+							Optional: true,
+							Default:  false,
+						},
+						"whitelist_enabled": {
+							Type:     schema.TypeBool,
+							Optional: true,
+							Default:  false,
+						},
+						"whitelist_cidr": {
+							Type:     schema.TypeList,
+							Optional: true,
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
+						},
+						"authorization_header_enabled": {
+							Type:     schema.TypeBool,
+							Optional: true,
+							Default:  false,
+						},
+						"authorization_header_value": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+					},
+				},
+			},
 		},
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
@@ -119,6 +158,7 @@ func marshallModelPool(d *schema.ResourceData) (*Pool, error) {
 
 	time_shiftings := d.Get("time_shifting").([]interface{})
 	catchups := d.Get("catchup").([]interface{})
+	origins := d.Get("origin").([]interface{})
 	ve := Pool{
 		Name:        d.Get("name").(string),
 		Published:   d.Get("published").(bool),
@@ -168,6 +208,23 @@ func marshallModelPool(d *schema.ResourceData) (*Pool, error) {
 			ca.Bucket2 = &buc
 		}
 		ve.Catchup = &ca
+	}
+
+	for _, origin := range origins {
+		origi := origin.(map[string]interface{})
+		ori := Origin{
+			Enabled:                    origi["enabled"].(bool),
+			WhitelistEnabled:           origi["whitelist_enabled"].(bool),
+			AuthorizationHeaderEnabled: origi["authorization_header_enabled"].(bool),
+			AuthorizationHeaderValue:   origi["authorization_header_value"].(string),
+		}
+		ori.WhitelistCidr = []string{}
+		cidrs := origi["whitelist_cidr"].([]interface{})
+		for _, cidr := range cidrs {
+			ori.WhitelistCidr = append(ori.WhitelistCidr, cidr.(string))
+		}
+
+		ve.Origin = &ori
 	}
 
 	return &ve, nil
@@ -234,6 +291,11 @@ func resourcePoolRead(ctx context.Context, d *schema.ResourceData, m interface{}
 
 	catchup := flattenPoolCatchup(pool.Catchup)
 	if err := d.Set("catchup", catchup); err != nil {
+		return diag.FromErr(err)
+	}
+
+	origin := flattenPoolOrigin(pool.Origin)
+	if err := d.Set("origin", origin); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -324,6 +386,19 @@ func flattenPoolCatchupBucketS3(s3 *S3) []interface{} {
 	if s3 != nil {
 		c["access_key"] = s3.AccessKey
 		c["secret_key"] = s3.SecretKey
+	}
+	return []interface{}{c}
+}
+
+func flattenPoolOrigin(origin *Origin) []interface{} {
+
+	c := make(map[string]interface{})
+	if origin != nil {
+		c["enabled"] = origin.Enabled
+		c["whitelist_enabled"] = origin.WhitelistEnabled
+		c["whitelist_cidr"] = origin.WhitelistCidr
+		c["authorization_header_enabled"] = origin.AuthorizationHeaderEnabled
+		c["authorization_header_value"] = origin.AuthorizationHeaderValue
 	}
 	return []interface{}{c}
 }

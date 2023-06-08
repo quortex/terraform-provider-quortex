@@ -26,6 +26,7 @@ description: |-
 - **catchup** (Block List, Max: 1) (see [below for nested schema](#nestedblock--catchup))
 - **id** (String) The ID of this resource.
 - **label** (String)
+- **origin** (Block List, Max: 1) (see [below for nested schema](#nestedblock--origin))
 - **published** (Boolean)
 - **time_shifting** (Block List, Max: 1) (see [below for nested schema](#nestedblock--time_shifting))
 
@@ -58,6 +59,18 @@ Required:
 - **secret_key** (String)
 
 
+
+
+<a id="nestedblock--origin"></a>
+### Nested Schema for `origin`
+
+Optional:
+
+- **authorization_header_enabled** (Boolean)
+- **authorization_header_value** (String)
+- **enabled** (Boolean)
+- **whitelist_cidr** (List of String)
+- **whitelist_enabled** (Boolean)
 
 
 <a id="nestedblock--time_shifting"></a>

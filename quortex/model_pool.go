@@ -30,4 +30,14 @@ type Pool struct {
 	Label              string        `json:"label,omitempty"`
 	TimeShifting       *TimeShifting `json:"time_shifting,omitempty"`
 	Catchup            *Catchup      `json:"catchup,omitempty"`
+	Origin             *Origin       `json:"origin,omitempty"`
+}
+
+// Origin -
+type Origin struct {
+	Enabled                    bool     `json:"enabled"`
+	WhitelistEnabled           bool     `json:"whitelist_enabled"`
+	WhitelistCidr              []string `json:"whitelist_cidr"`
+	AuthorizationHeaderEnabled bool     `json:"authorization_header_enabled"`
+	AuthorizationHeaderValue   string   `json:"authorization_header_value"`
 }
