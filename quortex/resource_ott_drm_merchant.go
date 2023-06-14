@@ -80,6 +80,48 @@ func resourceOttDrmMerchant() *schema.Resource {
 					},
 				},
 			},
+			"ksm": {
+				Type:     schema.TypeList,
+				Optional: true,
+				Computed: true,
+				MinItems: 0,
+				MaxItems: 1,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"drm_server": {
+							Type:     schema.TypeString,
+							Required: true,
+						},
+					},
+				},
+			},
+			"mdrm": {
+				Type:     schema.TypeList,
+				Optional: true,
+				Computed: true,
+				MinItems: 0,
+				MaxItems: 1,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"auth_server": {
+							Type:     schema.TypeString,
+							Required: true,
+						},
+						"client_id": {
+							Type:     schema.TypeString,
+							Required: true,
+						},
+						"client_secret": {
+							Type:     schema.TypeString,
+							Required: true,
+						},
+						"drm_server": {
+							Type:     schema.TypeString,
+							Required: true,
+						},
+					},
+				},
+			},
 		},
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
@@ -91,6 +133,8 @@ func marshallModelDrmMerchant(d *schema.ResourceData) (*DrmMerchant, error) {
 
 	castlabs := d.Get("castlabs").([]interface{})
 	irdetos := d.Get("irdeto").([]interface{})
+	ksms := d.Get("ksm").([]interface{})
+	mdrms := d.Get("mdrm").([]interface{})
 	ve := DrmMerchant{
 		Name: d.Get("name").(string),
 	}
@@ -122,6 +166,31 @@ func marshallModelDrmMerchant(d *schema.ResourceData) (*DrmMerchant, error) {
 			}
 			ve.Irdeto = &irde
 			ve.Type = "irdeto"
+		}
+	}
+
+	for _, ksm := range ksms {
+		if ksm != nil {
+			ks := ksm.(map[string]interface{})
+			k := Ksm{
+				DrmServer: ks["drm_server"].(string),
+			}
+			ve.Ksm = &k
+			ve.Type = "ksm"
+		}
+	}
+
+	for _, mdrm := range mdrms {
+		if mdrm != nil {
+			mdr := mdrm.(map[string]interface{})
+			md := Mdrm{
+				AuthServer:   mdr["auth_server"].(string),
+				ClientId:     mdr["client_id"].(string),
+				ClientSecret: mdr["client_secret"].(string),
+				DrmServer:    mdr["drm_server"].(string),
+			}
+			ve.Mdrm = &md
+			ve.Type = "mdrm"
 		}
 	}
 
@@ -173,6 +242,16 @@ func resourceDrmMerchantRead(ctx context.Context, d *schema.ResourceData, m inte
 
 	irdeto := flattenDrmMerchantIrdeto(drmmerchant.Irdeto)
 	if err := d.Set("irdeto", irdeto); err != nil {
+		return diag.FromErr(err)
+	}
+
+	ksm := flattenDrmMerchantKsm(drmmerchant.Ksm)
+	if err := d.Set("ksm", ksm); err != nil {
+		return diag.FromErr(err)
+	}
+
+	mdrm := flattenDrmMerchantMdrm(drmmerchant.Mdrm)
+	if err := d.Set("mdrm", mdrm); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -241,6 +320,27 @@ func flattenDrmMerchantIrdeto(irdeto *Irdeto) []interface{} {
 		c["drm_server"] = irdeto.DrmServer
 		c["username"] = irdeto.Username
 		c["password"] = irdeto.Password
+	}
+	return []interface{}{c}
+}
+
+func flattenDrmMerchantKsm(ksm *Ksm) []interface{} {
+
+	c := make(map[string]interface{})
+	if ksm != nil {
+		c["drm_server"] = ksm.DrmServer
+	}
+	return []interface{}{c}
+}
+
+func flattenDrmMerchantMdrm(mdrm *Mdrm) []interface{} {
+
+	c := make(map[string]interface{})
+	if mdrm != nil {
+		c["auth_server"] = mdrm.AuthServer
+		c["client_id"] = mdrm.ClientId
+		c["client_secret"] = mdrm.ClientSecret
+		c["drm_server"] = mdrm.DrmServer
 	}
 	return []interface{}{c}
 }
