@@ -24,6 +24,8 @@ description: |-
 - **castlabs** (Block List, Max: 1) (see [below for nested schema](#nestedblock--castlabs))
 - **id** (String) The ID of this resource.
 - **irdeto** (Block List, Max: 1) (see [below for nested schema](#nestedblock--irdeto))
+- **ksm** (Block List, Max: 1) (see [below for nested schema](#nestedblock--ksm))
+- **mdrm** (Block List, Max: 1) (see [below for nested schema](#nestedblock--mdrm))
 
 <a id="nestedblock--castlabs"></a>
 ### Nested Schema for `castlabs`
@@ -47,5 +49,24 @@ Required:
 - **merchant_name** (String)
 - **password** (String)
 - **username** (String)
+
+
+<a id="nestedblock--ksm"></a>
+### Nested Schema for `ksm`
+
+Required:
+
+- **drm_server** (String)
+
+
+<a id="nestedblock--mdrm"></a>
+### Nested Schema for `mdrm`
+
+Required:
+
+- **auth_server** (String)
+- **client_id** (String)
+- **client_secret** (String)
+- **drm_server** (String)
 
 
