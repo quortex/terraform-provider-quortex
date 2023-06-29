@@ -108,7 +108,7 @@ func (c *Client) UpdateWebhook(webhookName string, webhook Webhook) (*Webhook, e
 
 // DeleteWebhook - Deletes an webhook
 func (c *Client) DeleteWebhook(webhookName string) error {
-	req, err := http.NewRequest("DELETE", fmt.Sprintf("%s/1.0/organization/webhooks/%s", c.HostURL, webhookName, webhookName), nil)
+	req, err := http.NewRequest("DELETE", fmt.Sprintf("%s/1.0/organization/webhooks/%s", c.HostURL, webhookName), nil)
 	if err != nil {
 		return err
 	}
