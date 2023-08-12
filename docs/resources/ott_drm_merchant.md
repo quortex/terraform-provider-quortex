@@ -56,6 +56,8 @@ Required:
 
 Required:
 
+- **client_certificate** (String)
+- **client_key** (String)
 - **drm_server** (String)
 
 

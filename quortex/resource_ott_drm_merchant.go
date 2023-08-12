@@ -92,6 +92,14 @@ func resourceOttDrmMerchant() *schema.Resource {
 							Type:     schema.TypeString,
 							Required: true,
 						},
+						"client_certificate": {
+							Type:     schema.TypeString,
+							Required: true,
+						},
+						"client_key": {
+							Type:     schema.TypeString,
+							Required: true,
+						},
 					},
 				},
 			},
@@ -173,7 +181,9 @@ func marshallModelDrmMerchant(d *schema.ResourceData) (*DrmMerchant, error) {
 		if ksm != nil {
 			ks := ksm.(map[string]interface{})
 			k := Ksm{
-				DrmServer: ks["drm_server"].(string),
+				DrmServer:         ks["drm_server"].(string),
+				ClientCertificate: ks["client_certificate"].(string),
+				ClientKey:         ks["client_key"].(string),
 			}
 			ve.Ksm = &k
 			ve.Type = "ksm"
@@ -329,6 +339,8 @@ func flattenDrmMerchantKsm(ksm *Ksm) []interface{} {
 	c := make(map[string]interface{})
 	if ksm != nil {
 		c["drm_server"] = ksm.DrmServer
+		c["client_certificate"] = ksm.ClientCertificate
+		c["client_key"] = ksm.ClientKey
 	}
 	return []interface{}{c}
 }
