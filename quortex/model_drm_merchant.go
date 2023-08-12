@@ -20,13 +20,13 @@ type Irdeto struct {
 
 // Ksm -
 type Ksm struct {
-	MerchantName string `json:"merchant_name,omitempty"`
-	DrmServer    string `json:"drm_server,omitempty"`
+	DrmServer         string `json:"drm_server,omitempty"`
+	ClientCertificate string `json:"client_certificate,omitempty"`
+	ClientKey         string `json:"client_key,omitempty"`
 }
 
 // Mdrm -
 type Mdrm struct {
-	MerchantName string `json:"merchant_name,omitempty"`
 	AuthServer   string `json:"auth_server,omitempty"`
 	ClientId     string `json:"client_id,omitempty"`
 	ClientSecret string `json:"client_secret,omitempty"`
