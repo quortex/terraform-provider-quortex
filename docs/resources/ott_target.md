@@ -69,11 +69,6 @@ Required:
 - **labels** (List of String)
 - **stream_type** (String)
 
-Optional:
-
-- **iv** (String)
-- **iv_mode** (String)
-
 Read-Only:
 
 - **uuid** (String)
