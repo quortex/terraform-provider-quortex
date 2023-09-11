@@ -114,14 +114,6 @@ func resourceOttTarget() *schema.Resource {
 											Type: schema.TypeString,
 										},
 									},
-									"iv": {
-										Type:     schema.TypeString,
-										Optional: true,
-									},
-									"iv_mode": {
-										Type:     schema.TypeString,
-										Optional: true,
-									},
 									"stream_type": {
 										Type:     schema.TypeString,
 										Required: true,
@@ -267,8 +259,6 @@ func marshallModelTarget(d *schema.ResourceData) (*Target, error) {
 				enc := encr.(map[string]interface{})
 				en := Encryption{
 					Uuid:       enc["uuid"].(string),
-					Iv:         enc["iv"].(string),
-					IvMode:     enc["iv_mode"].(string),
 					StreamType: enc["stream_type"].(string),
 				}
 
@@ -481,8 +471,6 @@ func flattenTargetEncryption(enc *[]Encryption) []interface{} {
 		for i, en := range *enc {
 			oi := make(map[string]interface{})
 			oi["uuid"] = en.Uuid
-			oi["iv"] = en.Iv
-			oi["iv_mode"] = en.IvMode
 			oi["stream_type"] = en.StreamType
 			oi["labels"] = en.Labels
 			ois[i] = oi

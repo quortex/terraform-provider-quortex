@@ -65,7 +65,7 @@ func basicAuth(username, password string) string {
 // NewClientApiKey -
 func NewClientApiKey(host *string, apikey *string, authserver *string) (*Client, error) {
 	c := Client{
-		HTTPClient: &http.Client{Timeout: 10 * time.Second},
+		HTTPClient: &http.Client{Timeout: 30 * time.Second},
 		HostURL:    *host,
 	}
 
@@ -105,7 +105,7 @@ func NewClientApiKey(host *string, apikey *string, authserver *string) (*Client,
 // NewClientOauth -
 func NewClientOauth(host *string, authserver *string, clientid *string, clientsecret *string, organization *string) (*Client, error) {
 	c := Client{
-		HTTPClient:   &http.Client{Timeout: 10 * time.Second},
+		HTTPClient:   &http.Client{Timeout: 30 * time.Second},
 		HostURL:      *host,
 		Organization: *organization,
 	}
@@ -145,7 +145,7 @@ func NewClientOauth(host *string, authserver *string, clientid *string, clientse
 // NewClientBasicAuth -
 func NewClientBasicAuth(host *string, username *string, password *string) (*Client, error) {
 	c := Client{
-		HTTPClient: &http.Client{Timeout: 10 * time.Second},
+		HTTPClient: &http.Client{Timeout: 30 * time.Second},
 		HostURL:    *host,
 	}
 
@@ -157,7 +157,7 @@ func NewClientBasicAuth(host *string, username *string, password *string) (*Clie
 // NewClientUnprotected -
 func NewClientUnprotected(host *string) (*Client, error) {
 	c := Client{
-		HTTPClient: &http.Client{Timeout: 10 * time.Second},
+		HTTPClient: &http.Client{Timeout: 30 * time.Second},
 		HostURL:    *host,
 	}
 

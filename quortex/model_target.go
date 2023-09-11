@@ -19,8 +19,6 @@ type HlsAdvanced struct {
 // Encryption -
 type Encryption struct {
 	Uuid       string   `json:"uuid,omitempty"`
-	Iv         string   `json:"iv"`
-	IvMode     string   `json:"iv_mode"`
 	StreamType string   `json:"stream_type"`
 	Labels     []string `json:"labels"`
 }
