@@ -82,6 +82,11 @@ func resourceOttInput() *schema.Resource {
 														Type: schema.TypeString,
 													},
 												},
+												"passphrase": {
+													Type:     schema.TypeString,
+													Optional: true,
+													Default:  "",
+												},
 											},
 										},
 									},
@@ -290,6 +295,7 @@ func marshallModelInput(d *schema.ResourceData) (*Input, error) {
 							for _, cidr := range cidrs {
 								listener.Cidr = append(listener.Cidr, cidr.(string))
 							}
+							listener.Passphrase = srt["passphrase"].(string)
 						}
 						srtt.Listener = &listener
 					}
@@ -493,9 +499,10 @@ func flattenSrt(srt *Srt) []interface{} {
 	return []interface{}{c}
 }
 
-func flattenListener(caller *Listener) []interface{} {
+func flattenListener(listener *Listener) []interface{} {
 	c := make(map[string]interface{})
-	c["cidr"] = caller.Cidr
+	c["cidr"] = listener.Cidr
+	c["passphrase"] = listener.Passphrase
 	return []interface{}{c}
 }
 

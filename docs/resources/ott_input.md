@@ -104,6 +104,7 @@ Optional:
 Optional:
 
 - **cidr** (List of String)
+- **passphrase** (String)
 
 
 <a id="nestedblock--stream--srt--overrides"></a>

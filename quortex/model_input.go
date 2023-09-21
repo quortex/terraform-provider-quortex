@@ -29,7 +29,8 @@ type Caller struct {
 
 // Listener -
 type Listener struct {
-	Cidr []string `json:"cidr,omitempty"`
+	Cidr       []string `json:"cidr,omitempty"`
+	Passphrase string   `json:"passphrase,omitempty"`
 }
 
 // Srt -
