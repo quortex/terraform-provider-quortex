@@ -31,16 +31,19 @@ func resourceOttPublishingPoint() *schema.Resource {
 				Type:     schema.TypeString,
 				Optional: true,
 				Default:  "",
+				ForceNew: true,
 			},
 			"processing_uuid": {
 				Type:     schema.TypeString,
 				Optional: true,
 				Default:  "",
+				ForceNew: true,
 			},
 			"target_uuid": {
 				Type:     schema.TypeString,
 				Optional: true,
 				Default:  "",
+				ForceNew: true,
 			},
 			"custom_path": {
 				Type:     schema.TypeString,
