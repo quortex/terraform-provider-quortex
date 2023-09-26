@@ -98,6 +98,7 @@ func Provider() *schema.Provider {
 			"quortex_ott_processing":       resourceOttProcessing(),
 			"quortex_ott_target":           resourceOttTarget(),
 			"quortex_ott_drm_merchant":     resourceOttDrmMerchant(),
+			"quortex_ott_publishing_point": resourceOttPublishingPoint(),
 			"quortex_organization_webhook": resourceOrganizationWebhook(),
 		},
 		DataSourcesMap:       map[string]*schema.Resource{},
