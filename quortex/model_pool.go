@@ -25,6 +25,7 @@ type Pool struct {
 	Uuid               string        `json:"uuid,omitempty"`
 	Name               string        `json:"name"`
 	Published          bool          `json:"published"`
+	PathPrefix         string        `json:"path_prefix,omitempty"`
 	InputRegion        string        `json:"input_region"`
 	StreamingCountries []string      `json:"streaming_countries"`
 	Label              string        `json:"label,omitempty"`
