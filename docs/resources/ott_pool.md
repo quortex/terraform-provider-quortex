@@ -27,6 +27,7 @@ description: |-
 - **id** (String) The ID of this resource.
 - **label** (String)
 - **origin** (Block List, Max: 1) (see [below for nested schema](#nestedblock--origin))
+- **path_prefix** (String)
 - **published** (Boolean)
 - **time_shifting** (Block List, Max: 1) (see [below for nested schema](#nestedblock--time_shifting))
 

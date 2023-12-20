@@ -23,6 +23,11 @@ func resourceOttPool() *schema.Resource {
 				Optional: true,
 				Default:  true,
 			},
+			"path_prefix": {
+				Type:     schema.TypeString,
+				Optional: true,
+				Default:  "",
+			},
 			"input_region": {
 				Type:     schema.TypeString,
 				Required: true,
@@ -162,6 +167,7 @@ func marshallModelPool(d *schema.ResourceData) (*Pool, error) {
 	ve := Pool{
 		Name:        d.Get("name").(string),
 		Published:   d.Get("published").(bool),
+		PathPrefix:  d.Get("path_prefix").(string),
 		InputRegion: d.Get("input_region").(string),
 		Label:       d.Get("label").(string),
 	}
@@ -273,6 +279,10 @@ func resourcePoolRead(ctx context.Context, d *schema.ResourceData, m interface{}
 	}
 
 	if err := d.Set("published", pool.Published); err != nil {
+		return diag.FromErr(err)
+	}
+
+	if err := d.Set("path_prefix", pool.PathPrefix); err != nil {
 		return diag.FromErr(err)
 	}
 
