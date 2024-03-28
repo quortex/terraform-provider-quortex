@@ -19,9 +19,7 @@ resource "quortex_ott_input" "my_input" {
     enabled = true
     srt {
       latency = 1000
-      caller {
-        address    = "srt://my_ip:my_port"
-        passphrase = "my_passphrase"
+      listener {
       }
     }
   }
