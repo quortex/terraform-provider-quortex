@@ -16,7 +16,6 @@ resource "quortex_ott_processing" "my_proc_hd" {
     }
   }
 
-
   audio {
     codec      = "aac-lc"
     bitrate    = 96000
@@ -27,7 +26,7 @@ resource "quortex_ott_processing" "my_proc_hd" {
   }
 
   subtitle {
-    track = "eng"
+    track  = "eng"
+    output = "eng"
   }
-
 }

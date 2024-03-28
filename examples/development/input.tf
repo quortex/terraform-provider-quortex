@@ -14,7 +14,6 @@ resource "quortex_ott_input" "my_input" {
     }
   }
 
-
   stream {
     name    = "ryan #2"
     enabled = true
@@ -26,5 +25,4 @@ resource "quortex_ott_input" "my_input" {
       }
     }
   }
-
 }

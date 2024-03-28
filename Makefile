@@ -2,9 +2,9 @@ TEST?=$$(go list ./... | grep -v 'vendor')
 HOSTNAME=localhost
 NAMESPACE=quortex
 NAME=quortex
-BINARY=terraform-provider-${NAME}
+BINARY=terraform-provider-${NAME}_v${VERSION}
 VERSION=0.0.1
-OS_ARCH=linux_amd64
+OS_ARCH=$$(uname | tr '[:upper:]' '[:lower:]')_$$(uname -m)
 
 default: install
 
