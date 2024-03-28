@@ -2,7 +2,7 @@ terraform {
   required_providers {
     quortex = {
       version = "0.0.1"
-      source  = "quortex/quortex"
+      source  = "localhost/quortex/quortex"
     }
   }
 }

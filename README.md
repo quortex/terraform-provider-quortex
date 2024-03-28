@@ -25,10 +25,10 @@ First, build and install the provider.
 $ make install
 ```
 
-Then, navigate to the `examples` directory.
+Then, navigate to the `examples/development` directory.
 
 ```shell
-$ cd examples
+$ cd examples/development
 ```
 
 Run the following command to initialize the workspace and apply the sample configuration.
