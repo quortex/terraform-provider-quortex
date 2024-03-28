@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     quortex = {
-      version = "0.1.3"
+      version = "0.2.0"
       source  = "quortex/quortex"
     }
   }
