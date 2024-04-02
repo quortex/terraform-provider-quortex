@@ -5,6 +5,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func resourceOttPool() *schema.Resource {
@@ -152,6 +153,12 @@ func resourceOttPool() *schema.Resource {
 					},
 				},
 			},
+			"processing_type": {
+				Type:         schema.TypeString,
+				Optional:     true,
+				Default:      "standard",
+				ValidateFunc: validation.StringInSlice([]string{"standard", "advanced"}, false),
+			},
 		},
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
@@ -165,11 +172,12 @@ func marshallModelPool(d *schema.ResourceData) (*Pool, error) {
 	catchups := d.Get("catchup").([]interface{})
 	origins := d.Get("origin").([]interface{})
 	ve := Pool{
-		Name:        d.Get("name").(string),
-		Published:   d.Get("published").(bool),
-		PathPrefix:  d.Get("path_prefix").(string),
-		InputRegion: d.Get("input_region").(string),
-		Label:       d.Get("label").(string),
+		Name:           d.Get("name").(string),
+		Published:      d.Get("published").(bool),
+		PathPrefix:     d.Get("path_prefix").(string),
+		InputRegion:    d.Get("input_region").(string),
+		Label:          d.Get("label").(string),
+		ProcessingType: d.Get("processing_type").(string),
 	}
 	countries := d.Get("streaming_countries").([]interface{})
 	for _, country := range countries {
