@@ -54,4 +54,5 @@ type Target struct {
 	EncryptionDynamic          *EncryptionDynamic `json:"encryption_dynamic,omitempty"`
 	DashAdvanced               *DashAdvanced      `json:"dash_advanced,omitempty"`
 	HlsAdvanced                *HlsAdvanced       `json:"hls_advanced,omitempty"`
+	Latency                    string             `json:"latency,omitempty"`
 }

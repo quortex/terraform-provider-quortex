@@ -5,6 +5,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func resourceOttTarget() *schema.Resource {
@@ -201,6 +202,12 @@ func resourceOttTarget() *schema.Resource {
 					Type: schema.TypeString,
 				},
 			},
+			"latency": {
+				Type:         schema.TypeString,
+				Optional:     true,
+				Default:      "standard",
+				ValidateFunc: validation.StringInSlice([]string{"standard", "low"}, false),
+			},
 		},
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
@@ -218,6 +225,7 @@ func marshallModelTarget(d *schema.ResourceData) (*Target, error) {
 		SegmentDuration: d.Get("segment_duration").(float64),
 		PlaylistLength:  d.Get("playlist_length").(int),
 		Container:       d.Get("container").(string),
+		Latency:         d.Get("latency").(string),
 	}
 	ilrs := d.Get("input_label_restriction").([]interface{})
 	for _, ilr := range ilrs {
