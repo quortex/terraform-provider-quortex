@@ -32,6 +32,7 @@ description: |-
 - **id** (String) The ID of this resource.
 - **identifier** (String)
 - **input_label_restriction** (List of String)
+- **latency** (String)
 - **processing_label_restriction** (List of String)
 - **published** (Boolean)
 - **scte_35** (Block List, Max: 1) (see [below for nested schema](#nestedblock--scte_35))
