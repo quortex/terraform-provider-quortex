@@ -61,6 +61,7 @@ func (c *Client) CreateTarget(poolName string, target Target) (*Target, error) {
 	if err != nil {
 		return nil, err
 	}
+	req.Header.Set("Publishing-Mode", "explicit")
 
 	body, err := c.doRequest(req)
 
