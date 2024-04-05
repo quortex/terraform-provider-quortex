@@ -61,6 +61,7 @@ func (c *Client) CreateProcessing(poolName string, processing Processing) (*Proc
 	if err != nil {
 		return nil, err
 	}
+	req.Header.Set("Publishing-Mode", "explicit")
 
 	body, err := c.doRequest(req)
 

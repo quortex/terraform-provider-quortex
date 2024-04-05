@@ -63,6 +63,7 @@ func (c *Client) CreateInput(poolName string, input Input) (*Input, error) {
 	if err != nil {
 		return nil, err
 	}
+	req.Header.Set("Publishing-Mode", "explicit")
 
 	body, err := c.doRequest(req)
 
