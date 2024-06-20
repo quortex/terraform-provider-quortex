@@ -92,12 +92,19 @@ Optional:
 
 - **bframe** (Boolean)
 - **bframe_number** (Number)
+- **closed_gop** (Boolean)
 - **encoding_mode** (String)
+- **encoding_quality** (Number)
+- **gop_max_size** (Number)
+- **gop_size** (Number)
+- **horizontal_sharpness** (Number)
 - **key_frame_interval** (Number)
 - **level** (String)
 - **logo_enabled** (Boolean)
 - **maxrate** (Number)
 - **profile** (String)
 - **quality** (String)
+- **quality_optimization** (String)
+- **vertical_sharpness** (Number)
 
 
