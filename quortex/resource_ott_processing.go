@@ -84,47 +84,82 @@ func resourceOttProcessing() *schema.Resource {
 									"profile": {
 										Type:     schema.TypeString,
 										Optional: true,
-										Default:  "",
+										Default:  nil,
 									},
 									"level": {
 										Type:     schema.TypeString,
 										Optional: true,
-										Default:  "",
+										Default:  nil,
 									},
 									"quality": {
 										Type:     schema.TypeString,
 										Optional: true,
-										Default:  "standard",
+										Default:  nil,
 									},
 									"encoding_mode": {
 										Type:     schema.TypeString,
 										Optional: true,
-										Default:  "cbr",
+										Default:  nil,
+									},
+									"encoding_quality": {
+										Type:     schema.TypeInt,
+										Optional: true,
+										Default:  nil,
+									},
+									"quality_optimization": {
+										Type:     schema.TypeString,
+										Optional: true,
+										Default:  nil,
+									},
+									"closed_gop": {
+										Type:     schema.TypeBool,
+										Optional: true,
+										Default:  nil,
+									},
+									"gop_size": {
+										Type:     schema.TypeInt,
+										Optional: true,
+										Default:  nil,
+									},
+									"gop_max_size": {
+										Type:     schema.TypeInt,
+										Optional: true,
+										Default:  nil,
 									},
 									"bframe": {
 										Type:     schema.TypeBool,
 										Optional: true,
-										Default:  true,
+										Default:  nil,
 									},
 									"bframe_number": {
 										Type:     schema.TypeInt,
 										Optional: true,
-										Default:  0,
+										Default:  nil,
 									},
 									"maxrate": {
 										Type:     schema.TypeInt,
 										Optional: true,
-										Default:  0,
+										Default:  nil,
 									},
 									"key_frame_interval": {
 										Type:     schema.TypeInt,
 										Optional: true,
-										Default:  2000,
+										Default:  nil,
+									},
+									"horizontal_sharpness": {
+										Type:     schema.TypeInt,
+										Optional: true,
+										Default:  nil,
+									},
+									"vertical_sharpness": {
+										Type:     schema.TypeInt,
+										Optional: true,
+										Default:  nil,
 									},
 									"logo_enabled": {
 										Type:     schema.TypeBool,
 										Optional: true,
-										Default:  false,
+										Default:  nil,
 									},
 								},
 							},
@@ -266,13 +301,24 @@ func marshallModelProcessing(d *schema.ResourceData) (*Processing, error) {
 							*bframe = val.(bool)
 							ad.Bframe = bframe
 						}
+						if val, ok := adv["closed_gop"]; ok {
+							closedgop := new(bool)
+							*closedgop = val.(bool)
+							ad.ClosedGop = closedgop
+						}
 						ad.Profile = adv["profile"].(string)
 						ad.Level = adv["level"].(string)
 						ad.Quality = adv["quality"].(string)
 						ad.EncodingMode = adv["encoding_mode"].(string)
+						ad.EncodingQuality = adv["encoding_quality"].(int)
+						ad.QualityOptimization = adv["quality_optimization"].(string)
+						ad.GopSize = adv["gop_size"].(int)
+						ad.GopMaxSize = adv["gop_max_size"].(int)
 						ad.BframeNumber = adv["bframe_number"].(int)
 						ad.Maxrate = adv["maxrate"].(int)
 						ad.KeyFrameIntervalMs = adv["key_frame_interval"].(int)
+						ad.HorizontalSharpness = adv["horizontal_sharpness"].(int)
+						ad.VerticalSharpness = adv["vertical_sharpness"].(int)
 						ad.LogoEnabled = adv["logo_enabled"].(bool)
 					}
 				}
@@ -450,10 +496,17 @@ func flattenAdvanced(advanced *Advanced) []interface{} {
 	c["level"] = (*advanced).Level
 	c["quality"] = (*advanced).Quality
 	c["encoding_mode"] = (*advanced).EncodingMode
+	c["encoding_quality"] = (*advanced).EncodingQuality
+	c["quality_optimization"] = (*advanced).QualityOptimization
+	c["closed_gop"] = (*advanced).ClosedGop
+	c["gop_size"] = (*advanced).GopSize
+	c["gop_max_size"] = (*advanced).GopMaxSize
 	c["bframe"] = (*advanced).Bframe
 	c["bframe_number"] = (*advanced).BframeNumber
 	c["maxrate"] = (*advanced).Maxrate
 	c["key_frame_interval"] = (*advanced).KeyFrameIntervalMs
+	c["horizontal_sharpness"] = (*advanced).HorizontalSharpness
+	c["vertical_sharpness"] = (*advanced).VerticalSharpness
 	c["logo_enabled"] = (*advanced).LogoEnabled
 
 	return []interface{}{c}

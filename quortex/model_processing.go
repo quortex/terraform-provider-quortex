@@ -8,15 +8,22 @@ type Resolution struct {
 
 // Advanced -
 type Advanced struct {
-	Profile            string `json:"profile,omitempty"`
-	Level              string `json:"level,omitempty"`
-	Quality            string `json:"quality,omitempty"`
-	EncodingMode       string `json:"encoding_mode,omitempty"`
-	Bframe             *bool  `json:"bframe,omitempty"`
-	BframeNumber       int    `json:"bframe_number,omitempty"`
-	Maxrate            int    `json:"maxrate,omitempty"`
-	KeyFrameIntervalMs int    `json:"key_frame_interval_ms,omitempty"`
-	LogoEnabled        bool   `json:"logo_enabled,omitempty"`
+	Profile             string `json:"profile,omitempty"`
+	Level               string `json:"level,omitempty"`
+	Quality             string `json:"quality,omitempty"`
+	EncodingMode        string `json:"encoding_mode,omitempty"`
+	EncodingQuality     int    `json:"encoding_quality,omitempty"`
+	QualityOptimization string `json:"quality_optimization,omitempty"`
+	ClosedGop           *bool  `json:"closed_gop,omitempty"`
+	GopSize             int    `json:"gop_size,omitempty"`
+	GopMaxSize          int    `json:"gop_max_size,omitempty"`
+	Bframe              *bool  `json:"bframe,omitempty"`
+	BframeNumber        int    `json:"bframe_number,omitempty"`
+	Maxrate             int    `json:"maxrate,omitempty"`
+	KeyFrameIntervalMs  int    `json:"key_frame_interval_ms,omitempty"`
+	HorizontalSharpness int    `json:"horizontal_sharpness,omitempty"`
+	VerticalSharpness   int    `json:"vertical_sharpness,omitempty"`
+	LogoEnabled         bool   `json:"logo_enabled,omitempty"`
 }
 
 // VideoMedia -
