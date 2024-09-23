@@ -157,7 +157,7 @@ func resourceOttPool() *schema.Resource {
 				Type:         schema.TypeString,
 				Optional:     true,
 				Default:      "standard",
-				ValidateFunc: validation.StringInSlice([]string{"standard", "advanced"}, false),
+				ValidateFunc: validation.StringInSlice([]string{"standard", "advanced", "warm_disaster_recovery"}, false),
 			},
 		},
 		Importer: &schema.ResourceImporter{
