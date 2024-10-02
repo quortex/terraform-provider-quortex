@@ -153,11 +153,11 @@ func resourceOttPool() *schema.Resource {
 					},
 				},
 			},
-			"processing_type": {
+			"type": {
 				Type:         schema.TypeString,
 				Optional:     true,
 				Default:      "standard",
-				ValidateFunc: validation.StringInSlice([]string{"standard", "advanced", "warm_disaster_recovery"}, false),
+				ValidateFunc: validation.StringInSlice([]string{"standard", "premium", "warm"}, false),
 			},
 		},
 		Importer: &schema.ResourceImporter{
@@ -172,12 +172,12 @@ func marshallModelPool(d *schema.ResourceData) (*Pool, error) {
 	catchups := d.Get("catchup").([]interface{})
 	origins := d.Get("origin").([]interface{})
 	ve := Pool{
-		Name:           d.Get("name").(string),
-		Published:      d.Get("published").(bool),
-		PathPrefix:     d.Get("path_prefix").(string),
-		InputRegion:    d.Get("input_region").(string),
-		Label:          d.Get("label").(string),
-		ProcessingType: d.Get("processing_type").(string),
+		Name:        d.Get("name").(string),
+		Published:   d.Get("published").(bool),
+		PathPrefix:  d.Get("path_prefix").(string),
+		InputRegion: d.Get("input_region").(string),
+		Label:       d.Get("label").(string),
+		Type:        d.Get("type").(string),
 	}
 	countries := d.Get("streaming_countries").([]interface{})
 	for _, country := range countries {

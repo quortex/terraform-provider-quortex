@@ -32,7 +32,7 @@ type Pool struct {
 	TimeShifting       *TimeShifting `json:"time_shifting,omitempty"`
 	Catchup            *Catchup      `json:"catchup,omitempty"`
 	Origin             *Origin       `json:"origin,omitempty"`
-	ProcessingType     string        `json:"processing_type"`
+	Type               string        `json:"type"`
 }
 
 // Origin -

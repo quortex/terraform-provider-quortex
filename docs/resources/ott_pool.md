@@ -28,9 +28,9 @@ description: |-
 - **label** (String)
 - **origin** (Block List, Max: 1) (see [below for nested schema](#nestedblock--origin))
 - **path_prefix** (String)
-- **processing_type** (String)
 - **published** (Boolean)
 - **time_shifting** (Block List, Max: 1) (see [below for nested schema](#nestedblock--time_shifting))
+- **type** (String)
 
 <a id="nestedblock--catchup"></a>
 ### Nested Schema for `catchup`
