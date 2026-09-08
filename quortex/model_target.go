@@ -32,9 +32,10 @@ type EncryptionDynamic struct {
 
 // Scte35 -
 type Scte35 struct {
-	Enabled    bool     `json:"enabled,omitempty"`
-	FilterType string   `json:"filter_type,omitempty"`
-	FilterList []string `json:"filter_list,omitempty"`
+	Enabled                bool     `json:"enabled,omitempty"`
+	DashMultiPeriodEnabled bool     `json:"dash_multi_period_enabled,omitempty"`
+	FilterType             string   `json:"filter_type,omitempty"`
+	FilterList             []string `json:"filter_list,omitempty"`
 }
 
 // Target -

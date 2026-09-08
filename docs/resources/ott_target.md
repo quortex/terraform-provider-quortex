@@ -90,6 +90,7 @@ Optional:
 
 Optional:
 
+- **dash_multi_period_enabled** (Boolean)
 - **enabled** (Boolean)
 - **filter_list** (List of String)
 - **filter_type** (String)

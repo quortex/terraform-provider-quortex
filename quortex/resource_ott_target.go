@@ -64,6 +64,11 @@ func resourceOttTarget() *schema.Resource {
 							Optional: true,
 							Default:  false,
 						},
+						"dash_multi_period_enabled": {
+							Type:     schema.TypeBool,
+							Optional: true,
+							Default:  false,
+						},
 						"filter_type": {
 							Type:     schema.TypeString,
 							Optional: true,
@@ -240,8 +245,9 @@ func marshallModelTarget(d *schema.ResourceData) (*Target, error) {
 	for _, scte35 := range scte35s {
 		scte := scte35.(map[string]interface{})
 		sc := Scte35{
-			Enabled:    scte["enabled"].(bool),
-			FilterType: scte["filter_type"].(string),
+			Enabled:                scte["enabled"].(bool),
+			DashMultiPeriodEnabled: scte["dash_multi_period_enabled"].(bool),
+			FilterType:             scte["filter_type"].(string),
 		}
 		filters := scte["filter_list"].([]interface{})
 		for _, filter := range filters {
@@ -455,6 +461,7 @@ func flattenTargetScte35(scte35 *Scte35) []interface{} {
 	c := make(map[string]interface{})
 	if scte35 != nil {
 		c["enabled"] = scte35.Enabled
+		c["dash_multi_period_enabled"] = scte35.DashMultiPeriodEnabled
 		c["filter_type"] = scte35.FilterType
 		c["filter_list"] = scte35.FilterList
 	}
